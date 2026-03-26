@@ -16,13 +16,12 @@ const lang = 'es';
     // Localized Redirection Logic
     const userLang = navigator.language || navigator.userLanguage;
     const langCode = userLang.slice(0, 2).toLowerCase();
+    const supportedLangs = ['tr', 'es', 'fr', 'de', 'nl', 'it', 'ru', 'en'];
     
     // Check if we are at root "/"
     if (window.location.pathname === '/' || window.location.pathname === '') {
-        if (langCode === 'tr') {
-            window.location.replace('/tr/');
-        } else if (langCode === 'es') {
-            window.location.replace('/es/');
+        if (supportedLangs.includes(langCode)) {
+            window.location.replace('/' + langCode + '/');
         } else {
             // Default to EN for others
             window.location.replace('/en/');
