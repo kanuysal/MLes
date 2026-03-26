@@ -668,12 +668,7 @@ img:hover {
   .header {
     padding-bottom: 30px;
   }
-  .header__modal {
-    display: none;
-  }
-  .header__socials {
-    display: none;
-  }
+  /* header__modal and header__socials are controlled by Header.astro inline media queries */
   .header__wrapper {
     -webkit-box-pack: center;
         -ms-flex-pack: center;

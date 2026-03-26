@@ -211,7 +211,11 @@ const waPhone = '34632623300';
             const pImg = p.images?.[0]?.src || p.image || '/img/placeholder.jpg';
             const pName = (p.title?.[lang] || p.title?.tr || p.productName || 'Model').split(' ')[0].toUpperCase();
             const pSlug = p.slug || p.id;
-            const pAttr = (p.mappedAttributes as any)?.['Etek Kesimi'] || 'Couture';
+            const pAttr = (() => {
+              const rawVal = (p.mappedAttributes as any)?.['Etek Kesimi'] || 'Couture';
+              const lookup = attrTranslations[lang] || {};
+              return lookup[rawVal] || lookup[rawVal.charAt(0).toUpperCase() + rawVal.slice(1).toLowerCase()] || rawVal;
+            })();
             return (
               <div class="related-card">
                 <a href={`/${lang}/product/${pSlug}`} class="related-card-link">
@@ -238,12 +242,16 @@ const waPhone = '34632623300';
         {t('product.not_found')}
       </h2>
       <p class="cta-subtitle">
-        {lang === 'tr'
-          ? 'Beğendiğiniz gelinlik görsellerini paylaşın ya da bize anlatın, hayalinizdeki tasarımı sizin için beraber gerçeğe dönüştürelim.'
-          : (lang === 'es'
-            ? 'Comparta sus imágenes favoritas o descríbanos su visión, y crearemos juntos el diseño de sus sueños.'
-            : 'Share your favorite bridal images or describe your vision, and together we will bring your dream design to life.')
-        }
+        {({
+          es: 'Comparta sus imágenes favoritas o descríbanos su visión, y crearemos juntos el diseño de sus sueños.',
+          en: 'Share your favorite bridal images or describe your vision, and together we will bring your dream design to life.',
+          tr: 'Beğendiğiniz gelinlik görsellerini paylaşın ya da bize anlatın, hayalinizdeki tasarımı sizin için beraber gerçeğe dönüştürelim.',
+          fr: 'Partagez vos images préférées ou décrivez votre vision, et nous créerons ensemble la robe de vos rêves.',
+          de: 'Teilen Sie Ihre Lieblingsbilder oder beschreiben Sie Ihre Vision, gemeinsam erschaffen wir das Kleid Ihrer Träume.',
+          nl: 'Deel uw favoriete afbeeldingen of beschrijf uw visie, en samen realiseren wij het trouwjurk van uw dromen.',
+          it: 'Condividi le tue immagini preferite o descrivici la tua visione, e insieme realizzeremo il vestito dei tuoi sogni.',
+          ru: 'Поделитесь любимыми образами или опишите свою мечту — вместе мы создадим платье, о котором вы мечтали.',
+        })[lang] || 'Share your favorite bridal images or describe your vision, and together we will bring your dream design to life.'}
       </p>
       <a
         href={`https://wa.me/${waPhone}?text=${encodeURIComponent(t('product.design_with_us'))}`}

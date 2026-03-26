@@ -3,14 +3,19 @@ import { useTranslations } from '../i18n/utils';
 const { lang = 'es' } = Astro.props;
 const t = useTranslations(lang);
 const labels = {
-    contact: { es: "Contacto", en: "Contact", tr: "İletişim" },
-    made_by: { es: "Realizado por", en: "Made by", tr: "Yapımcı" },
+    contact: { es: "Contacto", en: "Contact", tr: "İletişim", fr: "Contact", de: "Kontakt", nl: "Contact", it: "Contatti", ru: "Контакты" },
+    made_by: { es: "Realizado por", en: "Made by", tr: "Yapımcı", fr: "Réalisé par", de: "Realisiert von", nl: "Gemaakt door", it: "Realizzato da", ru: "Создано" },
     contribution: { 
-        title: { es: "Diseño Presencial & Online", en: "Design Office", tr: "Beraber Tasarlayalım" },
+        title: { es: "Diseño Presencial & Online", en: "Design Office", tr: "Beraber Tasarlayalım", fr: "Atelier Design", de: "Design-Büro", nl: "Ontwerp-Atelier", it: "Studio Design", ru: "Дизайн-офис" },
         text: { 
             es: "¿No encuentras el vestido que quieres? Hagámoslo juntos. Cuéntanos tu sueño, lo haremos realidad.", 
             en: "Can't find the dress you want? Let's make it together. Tell us your dream, we'll make it real.",
-            tr: "İstediğiniz gelinliği bulamazsanız, beraber yapalım. Bize hayalinizi anlatın, beraber gerçekleştirelim."
+            tr: "İstediğiniz gelinliği bulamazsanız, beraber yapalım. Bize hayalinizi anlatın, beraber gerçekleştirelim.",
+            fr: "Vous ne trouvez pas la robe que vous cherchez ? Créons-la ensemble. Racontez-nous votre rêve.",
+            de: "Finden Sie nicht das Brautkleid? Lassen Sie es uns gemeinsam entwerfen.",
+            nl: "Kunt u het gewenste jurk niet vinden? Laten we het samen doen.",
+            it: "Non trovi l'abito desiderato? Realizziamolo insieme.",
+            ru: "Не можете найти платье? Давайте создадим его вместе."
         }
     }
 };
@@ -70,7 +75,7 @@ const labels = {
         </button>
         <p style="font-family: 'Italiana', serif; font-size: 24px; text-transform: uppercase; margin-bottom: 20px;">{labels.contribution.title[lang]}</p>
         <p style="font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 30px;">{labels.contribution.text[lang]}</p>
-        <img class="modal-about__img" src="/videos/mina-lidya.jpg" alt="Mina Lidya Inspiration" style="width: 100%; height: auto; opacity: 0.7;">
+        <img class="modal-about__img" src="/img/elements/logo-text-mina.png" alt="Mina Lidya Inspiration" style="width: 100%; height: auto; opacity: 0.9; padding: 20px;">
     </div>
 </div>
 
