@@ -102,7 +102,7 @@ export const ui = {
   es: {
     'nav.home': 'Inicio',
     'nav.moda': 'Moda',
-    'nav.nupcial': 'Moda Nupcial',
+    'nav.nupcial': 'MODA MODESTA',
     'nav.atellier': 'Atelier',
     'nav.couture': 'Online Couture',
     'nav.alta_costura': 'Alta Costura',
@@ -181,7 +181,6 @@ export const ui = {
     'cat.salvar': 'Salvar',
     'cat.plus': 'Curvy',
     'cat.outlet': 'OUTLET',
-    'nav.nupcial': 'MODA MODESTA',
     'cat.modest': 'Novia Modesta',
     'wa.message': 'Hola, me gustaría recibir información sobre el modelo {model}.\n\nEnlace del producto: {url}',
     'cookie.title': 'PRIVACIDAD ELITE',
