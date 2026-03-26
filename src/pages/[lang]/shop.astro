@@ -911,7 +911,9 @@ const categories = [
                 const tKey = (attrTranslations[this.currentLang] && attrTranslations[this.currentLang][key]) || key;
                 const tVal = String(val).split(',').map(v => {
                     const trimmed = v.trim();
-                    return (attrTranslations[this.currentLang] && attrTranslations[this.currentLang][trimmed]) || trimmed;
+                    const lookup = attrTranslations[this.currentLang] || {};
+                    // Try exact, then capitalized version
+                    return lookup[trimmed] || lookup[trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase()] || trimmed;
                 }).join(', ');
 
                 return `<div class="lb-attr"><label>${tKey}</label><span>${tVal}</span></div>`;

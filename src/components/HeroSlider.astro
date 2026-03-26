@@ -175,23 +175,28 @@ const slides = [...baseSlides, baseSlides[0]]; // Repeat first for loop
 
     @media (max-width: 768px) {
         .hslider {
-            display: none;
+            display: block; /* Restore visibility */
         }
         .hslider-mobile {
-            display: block;
+            display: none;
         }
-        .hslider-mobile__wrapper {
-            height: 400px;
-            overflow: hidden;
+        .hslider__wrapper {
+            height: 450px; /* Condensed but visible */
         }
-        .hslider-mobile__item {
-            width: 100%;
-            height: 100%;
+        .hslider__slide {
+            max-width: 100%;
         }
-        .hslider-mobile img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .hslider__captions-fixed {
+            left: 20px;
+            bottom: 40px;
+            min-width: unset;
+        }
+        .hslider__caption-item {
+            min-width: unset;
+            width: 80%;
+        }
+        .hslider__caption-item span {
+            font-size: 24px;
         }
     }
     

@@ -108,8 +108,8 @@ const models = [
     <section class="models-showcase">
         <div class="container showcase-container">
             <div class="showcase-header">
-                <h2 class="showcase-title">Signature Selections</h2>
-                <p class="showcase-subtitle">Modelos exclusivos diseñados para momentos inolvidables</p>
+                <h2 class="showcase-title">{t('atelier.showcase_title')}</h2>
+                <p class="showcase-subtitle">{t('atelier.showcase_subtitle')}</p>
             </div>
             <div class="showcase-grid">
                 {models.map((model, idx) => (
@@ -136,21 +136,21 @@ const models = [
            <p class="why-subtitle-elite">{t('atelier.why_desc')}</p>
         </div>
 
-        <div class="why-grid-elite">
+         <div class="why-grid-elite">
            <div class="why-item">
               <span class="why-num">01</span>
-              <h3>Diseño Exclusivo</h3>
-              <p>Creamos piezas únicas que capturan la esencia de cada novia, fusionando arte y tejidos de la más alta calidad.</p>
+              <h3>{t('atelier.why1_title')}</h3>
+              <p>{t('atelier.why1_desc')}</p>
            </div>
            <div class="why-item">
               <span class="why-num">02</span>
-              <h3>Maestría Artesanal</h3>
-              <p>Cada puntada es realizada por expertos sastres en nuestro taller, garantizando acabados de alta costura impecables.</p>
+              <h3>{t('atelier.why2_title')}</h3>
+              <p>{t('atelier.why2_desc')}</p>
            </div>
            <div class="why-item">
               <span class="why-num">03</span>
-              <h3>Experiencia Valencia</h3>
-              <p>Nuestra presencia en España nos permite integrar las tendencias más vanguardistas de la moda europea en cada diseño.</p>
+              <h3>{t('atelier.why3_title')}</h3>
+              <p>{t('atelier.why3_desc')}</p>
            </div>
         </div>
       </div>
@@ -160,9 +160,9 @@ const models = [
     <section class="atelier-cta">
         <div class="cta-bg" style={`background-image: url(${models[4].img});`}></div>
         <div class="cta-content">
-            <h2 class="cta-title">Vive la Experiencia Mina Lidya</h2>
-            <p>Agenda una cita personalizada y encuentra el vestido de tus sueños.</p>
-            <a href={`/${lang}/shop`} class="btn-elite-shimmer">{lang === 'es' ? 'VER COLECCIÓN' : 'VIEW COLLECTION'}</a>
+            <h2 class="cta-title">{t('atelier.cta_title')}</h2>
+            <p>{t('atelier.cta_desc')}</p>
+            <a href={`/${lang}/shop`} class="btn-elite-shimmer">{t('atelier.cta_btn')}</a>
         </div>
     </section>
 

@@ -89,7 +89,11 @@ const galleryItems = [
     }
     @media (max-width: 768px) {
         .gallery-home__wrapper {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .gallery-home__item img {
+            height: 300px !important;
         }
     }
 </style>

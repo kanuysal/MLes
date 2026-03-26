@@ -7,40 +7,45 @@ const t = useTranslations(lang);
 <header class="header">
     <div class="container">
         <div class="header__logo">
-            <div class="header__issu">
+            <!-- Mobile Optimized Row: Journal | Logo | Right-Actions -->
+            <div class="header__issu mobile-row-item">
                 <a href={`/${lang}/lookbook/`}><img src="/magazines/bridal.jpg" alt="Mina Lidya Lookbook"></a>
-                <div class="header__issu-desc">
+                <div class="header__issu-desc desktop-only">
                     <p>{t('header.banner_text')}</p>
                     <button class="btn-download"><a href={`/${lang}/lookbook/`}>{t('header.banner_btn')} ></a></button>
                 </div>
             </div>
-            <div class="logo">
+            <div class="logo mobile-row-item">
                 <a href={lang === 'es' ? '/' : `/${lang}/`}>
                     <span class="alta-costura-tag">{t('header.logo_sub')}</span>
                     <h1 class="main-logo-text">MİNA LİDYA</h1>
                 </a>
             </div>
-            <div class="header__right">
-                <div class="dropdown header__socials" style="margin-left: auto;">
-                    <ul>
-                        <li class="dropbtn header__nav-links-main">
-                            <a href="#">
-                                {lang.toUpperCase()}
-                                 <img src="/img/elements/down.svg" alt="">
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="dropdown-content">
+            <div class="header__right mobile-row-item">
+                <div class="mobile-actions-wrapper">
+                    <div class="dropdown header__socials">
                         <ul>
-                            <li><a href="/es/">Español (ES)</a></li>
-                            <li><a href="/en/">English (EN)</a></li>
-                            <li><a href="/tr/">Türkçe (TR)</a></li>
-                            <li><a href="/fr/">Français (FR)</a></li>
-                            <li><a href="/de/">Deutsch (DE)</a></li>
-                            <li><a href="/nl/">Nederlands (NL)</a></li>
-                            <li><a href="/it/">Italiano (IT)</a></li>
-                            <li><a href="/ru/">Русский (RU)</a></li>
+                            <li class="dropbtn header__nav-links-main">
+                                <a href="#">
+                                    {lang.toUpperCase()}
+                                </a>
+                            </li>
                         </ul>
+                        <div class="dropdown-content">
+                            <ul>
+                                <li><a href="/es/">ES</a></li>
+                                <li><a href="/en/">EN</a></li>
+                                <li><a href="/tr/">TR</a></li>
+                                <li><a href="/fr/">FR</a></li>
+                                <li><a href="/de/">DE</a></li>
+                                <li><a href="/nl/">NL</a></li>
+                                <li><a href="/it/">IT</a></li>
+                                <li><a href="/ru/">RU</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header__modal" id="open-modalabout">
+                        <img src="/img/elements/burger.svg" alt="Menu">
                     </div>
                 </div>
             </div>
@@ -55,11 +60,6 @@ const t = useTranslations(lang);
     </div>
     
     <div class="container">
-        <div class="header__wrapper">
-           
-            <div class="header__modal" id="open-modalabout">
-                <img src="/img/elements/burger.svg" alt="">
-            </div>
 
             <nav class="header__nav" id="nav-links">
                 <ul class="header__nav-links">
@@ -201,28 +201,24 @@ const t = useTranslations(lang);
             transform: translateY(0);
         }
 
-        /* Standardize All Dropdown Links */
-        .dropdown-content ul li a,
-        .dropdown-mb-visible-content ul li a {
-            display: block;
-            padding: 10px 25px;
-            font-size: 11px;
-            letter-spacing: 1px;
-            color: #555 !important;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
+        /* MOBILE HEADER OPTIMIZATION */
+        @media (max-width: 1024px) {
+            .header { margin: 15px 0 !important; }
+            .header__logo { 
+                flex-direction: row !important; 
+                justify-content: space-between;
+                align-items: center;
+                gap: 15px;
+            }
+            .header__issu img { height: 60px !important; margin: 0 !important; }
+            .desktop-only { display: none !important; }
+            .main-logo-text { font-size: 28px !important; }
+            .alta-costura-tag { font-size: 8px !important; letter-spacing: 0.1em !important; }
+            .mobile-actions-wrapper { display: flex; align-items: center; gap: 15px; }
+            .header__modal { display: block !important; width: 24px !important; margin: 0 !important; }
+            .header__socials { display: block !important; margin: 0 !important; }
+            .dropbtn a { font-size: 14px !important; font-weight: bold; }
         }
-
-        .dropdown-content ul li a:hover,
-        .dropdown-mb-visible-content ul li a:hover {
-            color: #D5A08D !important;
-            padding-left: 30px;
-            background: #fafafa;
-        }
-
-        /* LIGHTBOX BUTTON FIXES (Applied via Global or inside shop.astro) */
     </style>
 </header>
 <div class="line-deco"></div>

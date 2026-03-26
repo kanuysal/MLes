@@ -38,7 +38,7 @@ const products = [
     <!-- Hero Section -->
     <section class="alta-hero">
       <video autoplay muted loop playsinline class="hero-video-bg">
-        <source src="/videos/alta.mp4" type="video/mp4" />
+        <source src="/videos/couture.mp4" type="video/mp4" />
       </video>
       <div class="hero-overlay"></div>
       <div class="container hero-content">
@@ -118,7 +118,7 @@ div>
             <div class="q-overlay"></div>
             <div class="q-content">
                 <blockquote class="cinematic-text">
-                    "Lo hacemos con pasión y lo vistan con amor."
+                    {t('alta.cinematic_quote')}
                 </blockquote>
             </div>
         </div>
@@ -128,8 +128,8 @@ div>
     <section class="signature-grid">
         <div class="container">
             <div class="grid-header">
-                <span class="grid-tag">LOOKBOOK 2026</span>
-                <h2 class="grid-title">Piezas de Colección</h2>
+                <span class="grid-tag">{t('alta.collection_tag')}</span>
+                <h2 class="grid-title">{t('alta.collection_title')}</h2>
             </div>
             <div class="product-showcase">
                 {products.map((p, idx) => (
@@ -151,11 +151,11 @@ div>
     <section class="alta-cta">
         <div class="container cta-flex">
             <div class="cta-left">
-                <h2 class="cta-title">¿Sueñas con el vestido perfecto?</h2>
-                <p>Nuestros diseñadores están listos para dar vida a tu visión.</p>
+                <h2 class="cta-title">{t('alta.cta_title')}</h2>
+                <p>{t('alta.cta_desc')}</p>
             </div>
             <div class="cta-right">
-                <a href={`/${lang}/shop`} class="btn-elite-shimmer">AGENDAR CONSULTA</a>
+                <a href={`/${lang}/shop`} class="btn-elite-shimmer">{t('alta.cta_btn')}</a>
             </div>
         </div>
     </section>

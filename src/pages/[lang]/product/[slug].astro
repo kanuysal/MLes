@@ -110,7 +110,9 @@ const waPhone = '34632623300';
                 // Value translation: split by comma if multiple values
                 const translatedVal = String(val).split(',').map(v => {
                   const trimmed = v.trim();
-                  return (attrTranslations[lang] && attrTranslations[lang][trimmed]) || trimmed;
+                  const lookup = attrTranslations[lang] || {};
+                  // Try exact, then capitalized version
+                  return lookup[trimmed] || lookup[trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase()] || trimmed;
                 }).join(', ');
 
                 return (
