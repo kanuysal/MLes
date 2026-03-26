@@ -1,0 +1,301 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import products from '../../data/products.json';
+
+const { lang = 'es' } = Astro.params;
+---
+
+<Layout title="Mina Master Elite Dashboard" description="Luxury Analytics & CMS Management" lang={lang}>
+  <div id="admin-auth" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="alta-costura-tag">ALTA COSTURA</span>
+        <h1 class="main-logo-text" style="font-size: 32px;">MINA LIDYA</h1>
+      </div>
+      <h2>MASTER ACCESS</h2>
+      <p>Enter your credentials to manage the elite collection</p>
+      <input type="password" id="admin-pass" placeholder="••••" class="elite-input" onkeyup="if(event.key==='Enter')login()" />
+      <button onclick="login()" class="elite-btn">AUTHORIZE SESSION</button>
+    </div>
+  </div>
+
+  <div id="admin-panel" class="hidden">
+    <!-- Navbar -->
+    <nav class="admin-nav">
+      <div class="container container-admin">
+        <div class="nav-left">
+          <span class="alta-costura-tag">MINA LIDYA</span>
+          <span class="panel-tag">ELITE DASHBOARD</span>
+        </div>
+        <div class="nav-right">
+          <button onclick="logout()" class="nav-link">LOGOUT</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="admin-main">
+      <div class="container container-admin">
+        
+        <!-- Stats Summary -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">TOTAL VISITS</span>
+            <span class="stat-value" id="total-visits">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">UNIQUE VISITORS</span>
+            <span class="stat-value" id="unique-visitors">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">AVG. DURATION</span>
+            <span class="stat-value" id="avg-duration">0s</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">CATALOG SIZE</span>
+            <span class="stat-value">{products.length}</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Left: Analytics Table -->
+          <div class="table-container-admin">
+            <div class="table-header">
+              <h3>GEOGRAPHICAL INSIGHTS</h3>
+              <div class="filter-controls" style="display: flex; gap: 15px; align-items: center;">
+                <select id="time-filter" onchange="loadStats()" class="elite-select" style="padding: 5px 10px; font-size: 10px; font-weight: 700; border: 1px solid #eee; background: none; border-radius: 4px; cursor: pointer;">
+                  <option value="all">ALL TIME</option>
+                  <option value="day">LAST 24H</option>
+                  <option value="week">THIS WEEK</option>
+                  <option value="month">THIS MONTH</option>
+                </select>
+                <button onclick="resetData()" class="reset-btn">RESET DATA</button>
+              </div>
+            </div>
+            <table class="elite-table">
+              <thead>
+                <tr>
+                  <th>COUNTRY / CITY</th>
+                  <th>VISITS</th>
+                  <th>LAST SEEN</th>
+                  <th>AVG STAY</th>
+                  <th>DEVICE</th>
+                </tr>
+              </thead>
+              <tbody id="stats-body">
+                <!-- Dynamic injected -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right: Page Popularity -->
+          <div class="table-container-admin">
+            <div class="table-header">
+              <h3>HOTTEST PAGES</h3>
+            </div>
+            <div class="pages-list" id="popular-pages">
+                <!-- Dynamic injected -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .auth-card {
+      background: #111;
+      padding: 60px;
+      border: 1px solid #333;
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+    }
+    .auth-logo { margin-bottom: 40px; }
+    .auth-card h2 { font-family: 'Italiana', serif; color: #fff; font-size: 24px; letter-spacing: 4px; margin-bottom: 10px; }
+    .auth-card p { color: #666; font-family: 'Inter', sans-serif; font-size: 13px; margin-bottom: 30px; letter-spacing: 1px; }
+    
+    .elite-input {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      padding: 20px;
+      color: #fff;
+      text-align: center;
+      font-size: 24px;
+      letter-spacing: 10px;
+      margin-bottom: 30px;
+      outline: none;
+      transition: border 0.3s;
+    }
+    .elite-input:focus { border-color: #6a5921; }
+    .elite-btn {
+      width: 100%;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+    }
+    .elite-btn:hover { background: #6a5921; color: #fff; }
+
+    /* Admin UI */
+    #admin-panel { background: #fafafa; min-height: 100vh; color: #111; font-family: 'Inter', sans-serif; }
+    .admin-nav { background: #fff; border-bottom: 1px solid #eee; padding: 25px 0; position: sticky; top: 0; z-index: 100; }
+    .container-admin { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
+    .nav-left { display: flex; flex-direction: column; }
+    .panel-tag { font-size: 10px; letter-spacing: 3px; font-weight: 900; color: #000; margin-top: 5px; opacity: 0.5; }
+    .nav-right { display: flex; align-items: center; }
+    .nav-link { background: none; border: none; font-size: 11px; letter-spacing: 1px; font-weight: 700; cursor: pointer; color: #999; }
+    .nav-link:hover { color: #000; }
+
+    .admin-main { padding: 60px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 50px; }
+    .stat-card { background: #fff; border: 1px solid #eee; padding: 40px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .stat-label { display: block; font-size: 10px; letter-spacing: 2px; color: #999; font-weight: 700; margin-bottom: 15px; }
+    .stat-value { font-family: 'Italiana', serif; font-size: 42px; color: #111; }
+
+    .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+    .table-container-admin { background: #fff; border: 1px solid #eee; padding: 0; border-radius: 4px; overflow: hidden; }
+    .table-header { padding: 30px 40px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .table-header h3 { font-size: 13px; letter-spacing: 2px; font-weight: 800; }
+    
+    .elite-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .elite-table th { padding: 20px 40px; font-size: 10px; letter-spacing: 1px; color: #aaa; text-transform: uppercase; border-bottom: 1px solid #eee; }
+    .elite-table td { padding: 20px 40px; font-size: 13px; border-bottom: 1px solid #fafafa; }
+    
+    .reset-btn { font-size: 10px; color: #cc0000; font-weight: 700; background: none; border: none; cursor: pointer; }
+    .pages-list { padding: 20px 40px; }
+    .page-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f9f9f9; }
+    .page-title { font-size: 12px; font-weight: 500; color: #555; }
+    .page-count { font-weight: 800; font-size: 12px; }
+
+    .hidden { display: none !important; }
+  </style>
+
+  <script is:inline>
+    const PASS = "Serkan";
+    
+    function login() {
+        const inp = document.getElementById('admin-pass').value;
+        if (inp === PASS) {
+            document.getElementById('admin-auth').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            sessionStorage.setItem('mina_admin_auth', 'true');
+            loadStats();
+        } else {
+            alert('REJECTED: Invalid Authorization Key.');
+        }
+    }
+
+    function logout() {
+        sessionStorage.removeItem('mina_admin_auth');
+        window.location.reload();
+    }
+
+    if (sessionStorage.getItem('mina_admin_auth') === 'true') {
+        setTimeout(login_bypass, 100);
+    }
+    
+    function login_bypass() {
+        document.getElementById('admin-auth').classList.add('hidden');
+        document.getElementById('admin-panel').classList.remove('hidden');
+        loadStats();
+    }
+
+    function resetData() {
+        if (confirm("Clear all analytics database records? This cannot be undone.")) {
+            localStorage.removeItem('mina_elite_analytics');
+            loadStats();
+        }
+    }
+
+    function loadStats() {
+        let logs = JSON.parse(localStorage.getItem('mina_elite_analytics') || '[]');
+        const timeFilter = document.getElementById('time-filter').value;
+        const now = new Date();
+        
+        // Filter by time
+        if (timeFilter !== 'all') {
+            logs = logs.filter(l => {
+                const logDate = new Date(l.timestamp);
+                const diffMs = now - logDate;
+                if (timeFilter === 'day') return diffMs < 86400000;
+                if (timeFilter === 'week') return diffMs < 86400000 * 7;
+                if (timeFilter === 'month') return diffMs < 86400000 * 30;
+                return true;
+            });
+        }
+
+        // Total stats
+        document.getElementById('total-visits').innerText = logs.length;
+        const uniqueIds = new Set(logs.map(l => l.id));
+        document.getElementById('unique-visitors').innerText = uniqueIds.size;
+        
+        const totalDuration = logs.reduce((acc, l) => acc + (l.duration || 0), 0);
+        const avgDur = logs.length > 0 ? Math.floor(totalDuration / logs.length) : 0;
+        document.getElementById('avg-duration').innerText = avgDur + 's';
+
+        // Geography table
+        const geoMap = {};
+        logs.forEach(l => {
+            const key = `${l.country} - ${l.city}`;
+            if (!geoMap[key]) geoMap[key] = { count: 0, sumDur: 0, screen: l.screen, lastSeen: l.timestamp };
+            geoMap[key].count++;
+            geoMap[key].sumDur += (l.duration || 0);
+            if (new Date(l.timestamp) > new Date(geoMap[key].lastSeen)) {
+                geoMap[key].lastSeen = l.timestamp;
+            }
+        });
+
+        const timeAgo = (dateStr) => {
+            const date = new Date(dateStr);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return Math.floor(seconds/60) + 'm ago';
+            if (seconds < 86400) return Math.floor(seconds/3600) + 'h ago';
+            return Math.floor(seconds/86400) + 'd ago';
+        };
+
+        const sortedGeo = Object.entries(geoMap).sort((a,b) => b[1].count - a[1].count);
+        document.getElementById('stats-body').innerHTML = sortedGeo.map(([loc, data]) => `
+            <tr>
+                <td><strong>${loc}</strong></td>
+                <td>${data.count}</td>
+                <td style="font-size:10px; opacity:0.6">${timeAgo(data.lastSeen)}</td>
+                <td>${Math.floor(data.sumDur / data.count)}s</td>
+                <td style="color:#aaa; font-size:10px">${data.screen}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="5" style="text-align:center; padding: 40px; color:#aaa">No records for this timeframe...</td></tr>';
+
+        // Pages List
+        const pageMap = {};
+        logs.forEach(l => {
+            const p = l.path;
+            pageMap[p] = (pageMap[p] || 0) + 1;
+        });
+        const sortedPages = Object.entries(pageMap).sort((a,b) => b[1] - a[1]);
+        document.getElementById('popular-pages').innerHTML = sortedPages.map(([path, count]) => `
+            <div class="page-item">
+                <span class="page-title">${path}</span>
+                <span class="page-count">${count}</span>
+            </div>
+        `).join('') || '<p style="color:#aaa">No paths traveled yet.</p>';
+    }
+  </script>
+</Layout>

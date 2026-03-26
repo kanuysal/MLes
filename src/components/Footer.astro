@@ -1,0 +1,111 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+const labels = {
+    contact: { es: "Contacto", en: "Contact", tr: "İletişim" },
+    made_by: { es: "Realizado por", en: "Made by", tr: "Yapımcı" },
+    contribution: { 
+        title: { es: "Diseño Presencial & Online", en: "Design Office", tr: "Beraber Tasarlayalım" },
+        text: { 
+            es: "¿No encuentras el vestido que quieres? Hagámoslo juntos. Cuéntanos tu sueño, lo haremos realidad.", 
+            en: "Can't find the dress you want? Let's make it together. Tell us your dream, we'll make it real.",
+            tr: "İstediğiniz gelinliği bulamazsanız, beraber yapalım. Bize hayalinizi anlatın, beraber gerçekleştirelim."
+        }
+    }
+};
+---
+<div class="line-deco"></div>
+
+<footer class="footer">
+    <div class="footertop">
+        <div class="container-6">
+            <div class="footertop__wrapper">
+                <nav class="footertop__nav">
+                   <ul class="footertop__nav-links">
+                        <li><a href={`/${lang}/contacto/`}>{labels.contact[lang]}</a></li>
+                        <li><a href="https://www.instagram.com/minalidyanovias/" target="_blank">Instagram (ES)</a></li>
+                        <li><a href="https://www.instagram.com/minalidyagelinlik/" target="_blank">Instagram (TR)</a></li>
+                    </ul>
+                </nav>
+                <div class="footertop__logo">
+                    <a href="/">
+                         <img src="/img/elements/logo-text-mina.png" alt="Mina Lidya logo" style="width: 250px; height: auto;">
+                    </a>
+                </div>
+                <div class="footertop__socials">
+                    <ul class="footertop__socials-links">
+                        <li><a href="https://minalidya.com" target="_blank">TURKIYE</a></li>
+                        <li><a href="https://minalidya.wedding" target="_blank">GLOBAL</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="line-deco"></div>
+    <div class="footerbottom">
+        <div class="container-6">
+            <div class="footerbottom__wrapper">
+                <div class="footerbottom__copyright">
+                    <p>©2026 Mina Lidya</p>
+                </div>
+                <div class="footerbottom__nav">
+                    <ul class="footerbottom__nav-links">
+                        <li><a href={`/${lang}/terminos/`}>{t('nav.terms')}</a></li>
+                        <li><a href={`/${lang}/privacidad/`}>{t('nav.privacy')}</a></li>
+                    </ul>
+                </div>
+                <div class="footerbottom__madeby">
+                    <p>{labels.made_by[lang]} <a href="https://minadesign.com.tr/">MinaDesign</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="modal-about" id="modal-about" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease;">
+    <div class="modal-about__wrapper" style="background: #111; color: #fff; border: 1px solid #333; padding: 40px; border-radius: 0; max-width: 500px; position: relative; text-align: center;">
+        <button class="modal-about__close" id="modal-close" style="background: none; border: none; cursor: pointer; position: absolute; top: 15px; right: 15px;">
+            <img src="/img/elements/close-white.svg" alt="Close" style="width: 20px;">
+        </button>
+        <p style="font-family: 'Italiana', serif; font-size: 24px; text-transform: uppercase; margin-bottom: 20px;">{labels.contribution.title[lang]}</p>
+        <p style="font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; opacity: 0.8; margin-bottom: 30px;">{labels.contribution.text[lang]}</p>
+        <img class="modal-about__img" src="/videos/mina-lidya.jpg" alt="Mina Lidya Inspiration" style="width: 100%; height: auto; opacity: 0.7;">
+    </div>
+</div>
+
+<style is:global>
+    .modal-about.visible {
+        display: flex !important;
+        opacity: 1 !important;
+    }
+    .modal-about.visible .modal-about__wrapper {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+    .modal-about__wrapper {
+        transform: scale(0.9) translateY(40px);
+        opacity: 0;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+</style>
+<script is:inline>
+    // Fix modal scripts (making sure they are globally available after page transitions)
+    function initModal() {
+        const modal = document.getElementById('modal-about');
+        const openBtn = document.getElementById('open-modalabout');
+        const closeBtn = document.getElementById('modal-close');
+        
+        if (openBtn) {
+            openBtn.onclick = () => modal.classList.add('visible');
+        }
+        if (closeBtn) {
+            closeBtn.onclick = () => modal.classList.remove('visible');
+        }
+        if (modal) {
+          modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('visible'); };
+        }
+    }
+    initModal();
+    document.addEventListener('astro:after-swap', initModal);
+</script>

@@ -1,0 +1,151 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+const content = {
+    es: {
+        title: "Condiciones de Uso",
+        version: "Versión 1.0",
+        p1: "El sitio web de Mina Lidya ubicado en minalidya.es es una obra protegida por derechos de autor perteneciente a Mina Lidya. Algunas características del Sitio pueden estar sujetas a pautas, términos o reglas adicionales, que se publicarán en el Sitio en relación con dichas características.",
+        p2: "Todos estos términos, pautas y reglas adicionales se incorporan por referencia en estas condiciones.",
+        p3: "Estas condiciones de uso describen los términos y condiciones legalmente vinculantes que rigen el uso del Sitio. AL CONECTARSE AL SITIO, USTED ACEPTA CUMPLIR CON ESTOS TÉRMINOS y declara tener la autoridad y capacidad para aceptar estas condiciones. DEBE TENER AL MENOS 18 AÑOS PARA ACCEDER AL SITIO. SI NO ACEPTA TODAS LAS DISPOSICIONES DE ESTAS CONDICIONES, NO SE CONECTE Y/O NO UTILICE EL SITIO.",
+        p4: "Acceso al sitio",
+        p5: "Restricciones. Los derechos que se le otorgan en estas condiciones están sujetos a las siguientes restricciones: (a) no debe vender, alquilar, ceder, transferir, distribuir, alojar o explotar comercialmente el Sitio; (b) no debe modificar, crear obras derivadas, desensamblar, decompilar o realizar ingeniería inversa de ninguna parte del Sitio; (c) no debe acceder al Sitio para crear un sitio web similar o competitivo; y (d) a menos que se indique lo contrario, ninguna parte del Sitio puede ser copiada, reproducida, distribuida, publicada, descargada, mostrada o transmitida de ninguna forma o por ningún medio.",
+        p6: "La empresa se reserva el derecho de modificar, suspender o interrumpir el Sitio con o sin previo aviso. Usted acepta que la Empresa no será responsable ante usted ni ante ningún tercero por cualquier modificación, interrupción o terminación del Sitio.",
+        p7: "Cookies y balises Web. Como cualquier otro sitio web, Mina Lidya utiliza 'cookies'. Estas cookies se utilizan para almacenar información, incluidas las preferencias de los visitantes y las páginas del sitio web que el visitante ha consultado o visitado. La información se utiliza para optimizar la experiencia de los usuarios personalizando el contenido de nuestra página web en función del tipo de navegador de los visitantes y/u otra información.",
+        contact: "Para cualquier duda, contáctenos en: novias@minalidya.es"
+    },
+    en: {
+        title: "Terms of Use",
+        version: "Version 1.0",
+        p1: "The Mina Lidya website located at minalidya.es is a copyrighted work belonging to Mina Lidya. Certain features of the Site may be subject to additional guidelines, terms, or rules, which will be posted on the Site in connection with such features.",
+        p2: "All such additional terms, guidelines, and rules are incorporated by reference into these conditions.",
+        p3: "These terms of use describe the legally binding terms and conditions that govern your use of the Site. BY CONNECTING TO THE SITE, YOU AGREE TO COMPLY WITH THESE TERMS and represent that you have the authority and capacity to accept these conditions. YOU MUST BE AT LEAST 18 YEARS OLD TO ACCESS THE SITE. IF YOU DO NOT AGREE WITH ALL THE PROVISIONS OF THESE CONDITIONS, DO NOT CONNECT AND/OR USE THE SITE.",
+        p4: "Access to the site",
+        p5: "Restrictions. The rights granted to you in these conditions are subject to the following restrictions: (a) you must not sell, rent, lease, transfer, distribute, host or commercially exploit the Site; (b) you must not modify, create derivative works of, disassemble, decompile or reverse engineer any part of the Site; (c) you must not access the Site to create a similar or competitive website; and (d) unless otherwise stated, no part of the Site may be copied, reproduced, distributed, published, downloaded, displayed or transmitted in any form or by any means.",
+        p6: "The company reserves the right to modify, suspend or discontinue the Site with or without notice. You agree that the Company will not be liable to you or any third party for any modification, interruption or termination of the Site.",
+        p7: "Cookies and Web Beacons. Like any other website, Mina Lidya uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.",
+        contact: "For any questions, contact us at: novias@minalidya.es"
+    },
+    tr: {
+        title: "Kullanım Koşulları",
+        version: "Versiyon 1.0",
+        p1: "minalidya.es adresinde bulunan Mina Lidya web sitesi, Mina Lidya'ya ait telif hakkıyla korunan bir çalışmadır. Sitenin bazı özellikleri, bu özelliklerle bağlantılı olarak Sitede yayınlanacak olan ek yönergelere, şartlara veya kurallara tabi olabilir.",
+        p2: "Tüm bu ek şartlar, yönergeler ve kurallar, atıf yoluyla bu koşullara dahil edilmiştir.",
+        p3: "Bu kullanım koşulları, Siteyi kullanımınızı yöneten yasal olarak bağlayıcı hüküm ve koşulları tanımlar. SİTEYE BAĞLANARAK, BU ŞARTLARA UYMAYI KABUL EDERSİNİZ ve bu şartları kabul etme yetkisine ve kapasitesine sahip olduğunuzu beyan edersiniz. SİTEYE ERİŞMEK İÇİN EN AZ 18 YAŞINDA OLMALISINIZ. BU KOŞULLARIN TÜM HÜKÜMLERİNİ KABUL ETMİYORSANIZ, SİTEYE BAĞLANMAYIN VE/VEYA SİTEYİ KULLANMAYIN.",
+        p4: "Siteye Erişim",
+        p5: "Kısıtlamalar. Bu koşullarda size tanınan haklar aşağıdaki kısıtlamalara tabidir: (a) Siteyi satmamalı, kiralamamalı, devretmemeli, dağıtmamalı, barındırmamalı veya ticari olarak sömürmemelisiniz; (b) Sitenin herhangi bir bölümünü değiştirmemeli, türev çalışmalar oluşturmamalı, parçalarına ayırmamalı, derlememeli veya tersine mühendislik yapmamalısınız; (c) benzer veya rekabetçi bir web sitesi oluşturmak için Siteye erişmemelisiniz; ve (d) aksi belirtilmedikçe, Sitenin hiçbir bölümü herhangi bir biçimde veya herhangi bir yolla kopyalanamaz, çoğaltılamaz, dağıtılamaz, yayınlanamaz, indirilemez, görüntülenemez veya iletilemez.",
+        p6: "Şirket, Siteyi önceden haber vererek veya vermeyerek değiştirme, askıya alma veya durdurma hakkını saklı tutar. Şirketin, Sitenin herhangi bir değişikliği, kesintisi veya sonlandırılması nedeniyle size veya herhangi bir üçüncü tarafa karşı sorumlu olmayacağını kabul edersiniz.",
+        p7: "Çerezler ve Web İşaretçileri. Diğer tüm web siteleri gibi Mina Lidya da 'çerezler' kullanır. Bu çerezler, ziyaretçilerin tercihleri ve ziyaretçinin eriştiği veya ziyaret ettiği web sitesindeki sayfalar dahil olmak üzere bilgileri depolamak için kullanılır. Bilgiler, web sayfası içeriğimizi ziyaretçilerin tarayıcı türüne ve/veya diğer bilgilere göre özelleştirerek kullanıcıların deneyimini optimize etmek için kullanılır.",
+        contact: "Her türlü sorunuz için bizimle iletişime geçin: novias@minalidya.es"
+    }
+};
+
+const pageContent = content[lang] || content['es'];
+
+---
+
+<Layout title={`${pageContent.title} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="legal-page">
+    <div class="container-narrow">
+      <header class="legal-header">
+        <h1 class="legal-title">{pageContent.title}</h1>
+        <p class="legal-version">{pageContent.version}</p>
+      </header>
+      
+      <section class="legal-content">
+        <p>{pageContent.p1}</p>
+        <p>{pageContent.p2}</p>
+        <p>{pageContent.p3}</p>
+        
+        <h2>{pageContent.p4}</h2>
+        <p>{pageContent.p5}</p>
+        <p>{pageContent.p6}</p>
+        
+        <h2>Cookies</h2>
+        <p>{pageContent.p7}</p>
+        
+        <div class="legal-contact-box">
+            <p>{pageContent.contact}</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 180px 0 100px;
+    background: #fff;
+    color: #333;
+    line-height: 1.8;
+    font-family: 'Inter', sans-serif;
+  }
+  .container-narrow {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+  .legal-header {
+    margin-bottom: 60px;
+    text-align: center;
+  }
+  .legal-title {
+    font-family: 'Italiana', serif;
+    font-size: 48px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+  }
+  .legal-version {
+    font-style: italic;
+    color: #999;
+    font-size: 14px;
+  }
+  .legal-content h2 {
+    font-family: 'Italiana', serif;
+    font-size: 24px;
+    margin: 40px 0 20px;
+    text-transform: uppercase;
+    color: #111;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  .legal-content p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+  .legal-contact-box {
+    margin-top: 60px;
+    padding: 30px;
+    background: #f9f9f9;
+    border-left: 4px solid #D5A08D;
+    font-style: italic;
+  }
+  @media (max-width: 768px) {
+    .legal-title { font-size: 32px; }
+  }
+</style>

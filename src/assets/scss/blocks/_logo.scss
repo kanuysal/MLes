@@ -1,0 +1,51 @@
+.logo {
+    margin: 15px 0;
+    text-align: center;
+    flex: 33.3%;
+
+    img {
+        width: 320px;
+    }
+}
+
+@media (max-width: 764px) {
+    .logo {
+        margin-top: 60px;
+
+        img {
+            width: 350px;
+        }
+    }
+}
+
+@media (max-width: 680px) {
+    .logo {
+        img {
+            width: 300px;
+        }
+    }
+}
+
+@media (max-width: 320px) {
+    .logo {
+        img {
+            width: 250px;
+        }
+    }
+}
+
+@media (max-width: 260px) {
+    .logo {
+        img {
+            width: 200px;
+        }
+    }
+}
+
+@media (max-width: 220px) {
+    .logo {
+        img {
+            width: 180px;
+        }
+    }
+} 

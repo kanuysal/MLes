@@ -1,0 +1,17 @@
+.vertical-submission {
+    position: relative;
+
+    &::after {
+        content: 'Recherche photos de mariage';
+        color: $color-3;
+        font-family: $font-serif;
+        letter-spacing: 1px;
+        position: absolute;
+        display: block;
+        width: 150px;
+        height: 300px;
+        top: 5%;
+        left: 5%;
+        z-index: 99;
+    }
+}

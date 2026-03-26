@@ -1,0 +1,46 @@
+.designer {
+    margin-top: 45px;
+
+    &__date {
+        font-size: 12px;
+        font-weight: 200;
+        letter-spacing: 1px;
+        color: $color-1;
+        margin-bottom: 5px;
+    }
+    &__credits {
+        font-size: 14px;
+
+        letter-spacing: 1px;
+        color: $color-4;
+        margin-bottom: 32px;
+    }
+    &__name {
+        letter-spacing: 1px;
+        font-size: 24px;
+    }
+    &__desc-short {
+        text-align: center;
+        margin-top: 40px;
+        font-family: $font-serif;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    
+
+
+        a {
+            color: $color-1;
+            
+            &:hover {
+                color: $color-2;
+            }
+        }
+    }
+}
+
+@media (max-width: 764px) {
+    .designer {
+        padding: 0 10px;
+    }
+}

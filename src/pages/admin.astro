@@ -1,0 +1,6 @@
+---
+// Redirect /admin to the default locale's admin page if needed
+// This handles the "minalidya.es/admin" requirement
+export const prerender = false;
+return Astro.redirect('/es/admin/');
+---

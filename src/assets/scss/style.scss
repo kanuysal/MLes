@@ -1,0 +1,55 @@
+/*-----------------------GLOBAL STYLES---------------------*/
+@import "reset";
+@import "global";
+@import "buttons";
+
+
+/*--------------------BLOCKS--------------------*/
+@import "./blocks/logo";
+@import "./blocks/header";
+@import "./blocks/designer";
+@import "./blocks/gallery-1col";
+@import "./blocks/cta";
+@import "./blocks/back_to_top";
+@import "./blocks/burger";
+@import "./blocks/about";
+@import "./blocks/cards";
+@import "./blocks/designerslist";
+@import "./blocks/404";
+@import "./blocks/designersseason";
+@import "./blocks/gallery-home";
+@import "./blocks/gallery-footer";
+@import "./blocks/inspoboard";
+@import "./blocks/editorials";
+@import "./blocks/homeblog";
+@import "./blocks/footertop";
+@import "./blocks/footerbottom";
+@import "./blocks/article";
+@import "./blocks/dropdown";
+@import "./blocks/text";
+@import "./blocks/designersdirectory";
+@import "./blocks/modal-about";
+@import "./blocks/inspiration";
+@import "./blocks/cats";
+@import "./blocks/hslider";
+@import "./blocks/hslider-mobile";
+@import "./blocks/pagination";
+@import "./blocks/breadcrumbs";
+@import "./blocks/cartesinvitation";
+@import "./blocks/bridalpedia";
+@import "./blocks/bridalpedia-designer";
+@import "./blocks/bridalpedia-collections";
+@import "./blocks/robes";
+@import "./blocks/robe-detail";
+@import "./blocks/kc";
+@import "./blocks/myswiper";
+@import "./blocks/myslick";
+@import "./blocks/top";
+@import "./blocks/dropdown-mb-visible";
+
+@import "./blocks/contribution";
+@import "./blocks/magazine";
+@import "./blocks/vertical-submission";
+@import "./blocks/vertical-editorials-en.scss";
+
+@import "./blocks/table-responsive";

@@ -1,0 +1,228 @@
+.gallery-home {
+
+    &__wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /*-----------------(4, 1fr) to keep 4 blocks-----------------*/
+        /*min-height: 684px;*/
+        padding: 25px 0;
+        border-top: 0.5px solid $color-2;
+        //border-bottom: 0.5px solid $color-2;
+        column-gap: 30px;
+    }
+    .border-top-none {
+        border-top: unset;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        /*height: 583px;*/
+        //padding: 0 10px;
+        transition: all 0.5 ease-in-out;
+
+        img {
+            &:hover {
+                filter: grayscale(100%);
+            }
+        }
+
+
+        &-season {
+            font-size: 12px;
+            font-weight: 200;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: $color-2;
+            margin: 90px 0 10px;
+        }
+        &-collection {
+            font-size: 12px;
+            font-weight: 200;
+            color: $color-2;
+            margin-bottom: 55px;
+        }
+        &-designer {
+            font-size: 32px;
+            line-height: 130%;
+            margin-bottom: 10px;
+            padding: 0 50px;
+            font-family: $font-serif;
+            color: $color-4;
+        }
+        &-show {
+            font-size: 12px;
+            font-weight: 200;
+            color: $color-2;
+        }
+        &-line {
+            width: 0.5px;
+            height: 54px;
+            background-color: $color-2;
+            margin: 100px 0px 40px;  
+            animation: movebounce 3s linear infinite;
+        }
+
+        @keyframes movebounce {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(15px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        &-link {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+    }
+
+}
+.gallery-home__date {
+    font-size: 15px;
+    color: $color-gold;
+    margin: 10px 0;
+    font-style: italic;
+    text-align: left;
+}
+.gallery-home__desc {
+        font-family: $font-serif;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+        padding: 10px 0;
+}
+.gallery-home__line {
+    width: 100%;
+    height: 0.5px;
+    background-color: $color-1;
+    margin: 10px 0;
+}
+.gallery-home__cat {
+    font-family: $font-serif;
+    letter-spacing: 1px;
+    margin: 5px 0;
+    text-transform: uppercase;
+    text-align: left;
+    color: $color-gold;
+}
+
+
+
+
+@media only screen and (min-width:765px) and (max-width: 1490px) {
+    .gallery-home {
+        &__item {
+            &-season {
+                margin: 70px 0 10px;
+            }
+            &-line {
+                margin: 70px 0 30px;
+            }
+            &-link {
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}
+@media only screen and (min-width:765px) and (max-width: 1320px) {
+    .gallery-home {
+        &__item {
+            &-season {
+                margin: 50px 0 10px;
+            }
+            &-line {
+                margin: 50px 0 20px;
+
+            }
+        }
+    }
+}
+@media only screen and (min-width:765px) and (max-width: 1180px) {
+    .gallery-home {
+        &__item {
+            &-season {
+                margin: 35px 0 10px;
+            }
+            &-designer {
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width:765px) and (max-width: 1115px) {
+    .gallery-home {
+        &__item {
+        
+            &-designer {
+                font-size: 18px;
+            }
+            &-line {
+                margin: 30px 0 20px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width:765px) and (max-width: 940px) {
+    .gallery-home {
+        &__item {
+            &-collection {
+                margin-bottom: 35px;
+            }
+        
+            &-line {
+                height: 34px;
+            }
+        }
+    }
+}
+@media only screen and (min-width:765px) and (max-width: 860px) {
+    .gallery-home {
+        &__item {
+            &-season {
+                margin: 20px 0 10px;
+            }
+            &-collection {
+                margin-bottom: 25px;
+            }
+            &-line {
+                margin: 15px 0;
+            }
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    .gallery-home {
+        &__wrapper {
+            padding: 10px 0;
+            grid-template-columns: 1fr;
+        }
+        &__item {
+            margin-bottom: 5px;
+
+                &-season {
+                    margin: 20px 0 10px;
+                }
+                &-line {
+                    margin: 25px 0;
+                }  
+                img {
+                    &:hover {
+                        filter: unset;
+                    }
+                } 
+        }
+    }
+}
+

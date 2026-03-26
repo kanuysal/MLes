@@ -1,0 +1,1102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+import { attrTranslations } from '../../i18n/ui';
+import products from '../../data/products.json';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+const categories = [
+    { id: 'all', en: 'All', es: 'Todo', tr: 'Tümü' },
+    { id: 'gelinlik', en: 'Bridal', es: 'Novia', tr: 'Gelinlik' },
+    { id: 'tesettur-gelinlik', en: 'Modest', es: 'Modesta', tr: 'Tesettür' },
+    { id: 'after-party', en: 'After Party', es: 'After Party', tr: 'After Party' },
+    { id: 'nisan-elbisesi', en: 'Engagement', es: 'Compromiso', tr: 'Nişan' },
+    { id: 'kina-elbisesi', en: 'Henna', es: 'Henna', tr: 'Kına' },
+    { id: 'kaftan', en: 'Caftan', es: 'Caftán', tr: 'Kaftan' },
+    { id: 'abiye', en: 'Evening', es: 'Noche', tr: 'Abiye' },
+    { id: 'salvar', en: 'Shalvar', es: 'Shalvar', tr: 'Şalvar' },
+    { id: 'buyuk-beden', en: 'Curvy', es: 'Curvy', tr: 'Büyük Beden' },
+    { id: 'outlet', en: 'Outlet', es: 'Outlet', tr: 'Outlet' }
+];
+---
+
+<Layout title={`${t('nav.boutique')} | Mina Lidya`}>
+    <!-- External Assets for Lightbox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <main class="shop-page">
+        <div class="shop-top-sections">
+            <Header />
+
+        <!-- Breadcrumbs Section -->
+        <div class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs__nav">
+                    <a href={lang === 'es' ? '/' : `/${lang}/`}>{t('nav.home')}</a>
+                    <span class="separator">/</span>
+                    <span class="current">{t('nav.boutique')}</span>
+                </nav>
+                
+                <div class="shop-categories-strip">
+                    <div class="cats-left">
+                        {categories.map(cat => (
+                            <button class="cat-pill" data-category={cat.id}>
+                                {cat[lang] || cat.en}
+                            </button>
+                        ))}
+                    </div>
+                    <div class="cats-right">
+                        <button 
+                            class="toggle-pill" 
+                            id="modest-toggle"
+                            data-label={lang === 'tr' ? 'TESETTÜR UYUMU' : (lang === 'es' ? 'MODESTA UYUMU' : 'MODEST FILTER')}
+                            data-on={lang === 'tr' ? 'TESETTÜR: EVET ✓' : (lang === 'es' ? 'MODESTA: SÍ ✓' : 'MODEST: ON ✓')}
+                            data-off={lang === 'tr' ? 'TESETTÜR: HAYIR ✗' : (lang === 'es' ? 'MODESTA: NO ✗' : 'MODEST: OFF ✗')}
+                        >
+                            {lang === 'tr' ? 'TESETTÜR UYUMU' : (lang === 'es' ? 'MODESTA UYUMU' : 'MODEST FILTER')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="filter-bar">
+                    <div class="filter-info">
+                        <span id="product-count">0</span> {t('shop.products')}
+                    </div>
+                </div>
+
+                <div id="products-grid" class="products-grid">
+                    <!-- Products dynamically populated -->
+                </div>
+
+                <div class="load-more">
+                    <button id="load-more-btn" class="btn-outline" style="display: none;">{t('shop.load_more')}</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Structure -->
+    <div id="product-lightbox" class="product-lightbox">
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <div class="lightbox-left">
+                 <div class="lb-main-swiper swiper">
+                    <div class="swiper-wrapper" id="lb-swiper-wrapper"></div>
+                    <div class="swiper-button-next lb-nav-arrow lb-next"></div>
+                    <div class="swiper-button-prev lb-nav-arrow lb-prev"></div>
+                </div>
+                <div class="lb-thumbs-swiper swiper">
+                    <div class="swiper-wrapper" id="lb-thumbs-wrapper"></div>
+                </div>
+            </div>
+            <div class="lightbox-right">
+                <h2 class="lb-title" id="lb-title"></h2>
+                <div class="lb-desc-wrapper">
+                    <div class="lb-desc-container">
+                        <p class="lb-desc" id="lb-desc"></p>
+                    </div>
+                </div>
+                <div class="lb-attrs" id="lb-attributes"></div>
+                <div class="actions-container" id="lb-actions"></div>
+            </div>
+        </div>
+    </div>
+
+    <Footer />
+</Layout>
+
+
+<style is:global>
+    /* ═══════════════════════════════════════════
+       LIGHTBOX — Exact port from lightbox.css
+       ═══════════════════════════════════════════ */
+    .product-lightbox {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.85) !important;
+        z-index: 20000 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+        backdrop-filter: blur(5px);
+        cursor: auto !important;
+    }
+
+    .product-lightbox.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    .lightbox-content {
+        width: 95%;
+        max-width: 1200px;
+        height: 90vh;
+        background: #fff;
+        display: flex;
+        gap: 0;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .lightbox-left {
+        flex: 1.5;
+        background: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        position: relative;
+        padding: 0;
+    }
+
+    .lb-main-swiper {
+        width: 92%;
+        height: 96%;
+        position: relative;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    .lb-main-swiper .swiper-wrapper { height: 100%; }
+
+    .lb-main-swiper .swiper-slide {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        overflow: hidden;
+    }
+
+    .lb-main-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        display: block;
+    }
+
+    /* Thumbs hidden as per reference */
+    .lb-thumbs-swiper {
+        display: none !important;
+    }
+
+    /* Nav Arrows */
+    .lb-nav-arrow {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: transparent !important;
+        color: #000 !important;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 100;
+        margin: 0 !important;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .lb-nav-arrow:hover {
+        transform: translateY(-50%) scale(1.2);
+        opacity: 0.7;
+    }
+
+    .lb-nav-arrow::after {
+        font-size: 1.2rem !important;
+        font-weight: 300;
+    }
+
+    .lb-prev { left: 5px !important; }
+    .lb-next { right: 5px !important; }
+
+    /* Right panel */
+    .lightbox-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 40px;
+        overflow-y: auto;
+        height: 100%;
+    }
+
+    .lb-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #111;
+        line-height: 1.1;
+    }
+
+    .lb-desc-wrapper {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .lb-desc {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 0;
+    }
+
+    .lb-attrs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px 30px;
+        margin-bottom: 30px;
+        margin-top: 10px;
+    }
+
+    .lb-attr {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #f0f0f0;
+        font-family: 'Inter', sans-serif;
+        gap: 3px;
+    }
+
+    .lb-attr label {
+        font-weight: 600;
+        color: #999;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+    }
+
+    .lb-attr span {
+        color: #111;
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+
+    .actions-container {
+        margin-top: auto;
+    }
+
+    /* Close button */
+    .close-lightbox {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        font-size: 2.5rem;
+        cursor: pointer !important;
+        color: #111;
+        z-index: 20005;
+        background: white;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+    }
+
+    .close-lightbox:hover { transform: scale(1.1); }
+
+    /* Action buttons */
+    .actions-item-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 18px;
+        border-radius: 0;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .btn-dark {
+        background: #111;
+        color: #fff !important;
+    }
+    .btn-dark:hover { 
+        background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+        background-size: 200% auto;
+        animation: elite-shimmer 3s linear infinite;
+        color: #fff !important; 
+    }
+
+    .btn-outline-dark {
+        border: 1px solid #111;
+        color: #111 !important;
+        background: #fff; /* White BG as requested */
+    }
+    .btn-outline-dark:hover { 
+        background: #111; 
+        color: #fff !important; 
+    }
+
+    @keyframes elite-shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .lightbox-content {
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            max-height: 100%;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+        .lightbox-left {
+            flex: none;
+            width: 100%;
+            padding: 15px;
+            height: auto;
+        }
+        .lb-main-swiper {
+            width: 100%;
+            height: 60vw;
+        }
+        .lightbox-right {
+            flex: none;
+            width: 100%;
+            padding: 20px 25px 80px;
+            height: auto;
+            overflow-y: visible;
+        }
+        .lb-title { font-size: 2rem; margin-bottom: 10px; }
+        .lb-desc { font-size: 0.9rem; }
+        .lb-attrs { grid-template-columns: 1fr 1fr; gap: 15px; }
+        .close-lightbox { top: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.5); box-shadow: none; }
+    }
+
+</style>
+
+<style>
+    /* Header/Top Navigation area styles (Static) */
+    .shop-page {
+        padding-top: 0;
+        background-color: #fff;
+        color: #111;
+        min-height: 100vh;
+    }
+
+    .breadcrumbs {
+        background-color: #f4f4f4;
+        padding: 60px 0 40px;
+        margin-bottom: 0;
+    }
+    .breadcrumbs__nav {
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #666;
+        margin-bottom: 25px;
+    }
+    .breadcrumbs__nav a {
+        color: #666;
+        text-decoration: none;
+    }
+    .breadcrumbs__nav .current {
+        color: #111;
+        font-weight: 600;
+    }
+
+    .shop-categories-strip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        border-top: 1px solid #ddd;
+        padding-top: 25px;
+    }
+
+    .cats-left {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .cat-pill, .toggle-pill {
+        background: none;
+        border: 1px solid #ccc;
+        padding: 8px 18px;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #555;
+    }
+
+    .cat-pill.active {
+        background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+        background-size: 200% auto;
+        animation: elite-shimmer 3s linear infinite;
+        color: #fff !important;
+        border-color: transparent;
+    }
+
+    .toggle-pill {
+        border-color: #D5A08D;
+        color: #D5A08D;
+        font-weight: 600;
+    }
+</style>
+
+<style is:global>
+    /* Moved Dynamic Pill states to GLOBAL */
+    .toggle-pill.active {
+        background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D) !important;
+        background-size: 200% auto !important;
+        animation: elite-shimmer 3s linear infinite !important;
+        color: #fff !important;
+        border-color: transparent !important;
+    }
+
+    .toggle-pill.modest-off {
+        background-color: #fff !important;
+        color: #D5A08D !important;
+        border-color: #D5A08D !important;
+        opacity: 0.6;
+        text-decoration: line-through;
+        text-decoration-color: #D5A08D;
+    }
+
+    /* Moved Grid/Product styles to IS:GLOBAL because theyre injected via JS */
+    .products-section {
+        background-color: #fff;
+        padding: 60px 0 100px;
+    }
+
+    .filter-bar {
+        margin-bottom: 40px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        color: #111;
+        font-weight: 500;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 60px 30px;
+    }
+
+    .product-card {
+        cursor: pointer;
+    }
+
+    /* STRICT ASPECT RATIO for uniform boxes */
+    /* ACTIONS BUTTONS ON HOVER */
+    .product-card__image {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 150%; 
+        overflow: hidden;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+
+    .product-card__actions {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(0,0,0,0.1);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 10;
+    }
+
+    .product-card:hover .product-card__actions {
+        opacity: 1;
+    }
+
+    .action-btn {
+        background: rgba(255, 255, 255, 0.5); /* 50% opacity as requested */
+        color: #000;
+        border: none;
+        padding: 12px 25px;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        letter-spacing: 2px;
+        font-weight: 600;
+        text-transform: uppercase;
+        width: 160px;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 0;
+        backdrop-filter: blur(5px); /* Extra premium look */
+    }
+
+    .action-btn:hover {
+        background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+        background-size: 200% auto;
+        animation: elite-shimmer 3s linear infinite;
+        color: #fff !important;
+    }
+
+    /* Lightbox Styles for Thumbs */
+    .lb-thumbs-swiper {
+        margin-top: 15px;
+        height: 80px;
+    }
+    .lb-thumbs-swiper .swiper-slide {
+        width: 60px;
+        height: 80px;
+        opacity: 0.4;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
+    .lb-thumbs-swiper .swiper-slide-thumb-active {
+        opacity: 1;
+    }
+    .lb-thumbs-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .lb-attrs {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    .lb-attr {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+    .lb-attr label { font-weight: 600; color: #666; }
+    .lb-attr span { color: #111; }
+
+    .actions-item-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 15px;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dark {
+        background: #111;
+        color: #fff;
+    }
+    .btn-dark:hover { background: #000; }
+
+    .btn-outline-dark {
+        border: 1px solid #111;
+        color: #111;
+        background: transparent;
+    }
+    .btn-outline-dark:hover {
+        background: #111;
+        color: #fff;
+    }
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    .product-card:hover .product-card__image img {
+        transform: scale(1.05);
+    }
+
+    .product-card__info { text-align: center; }
+    .product-card__sku {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        color: #999;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+    .product-card__title {
+        font-family: 'Italiana', serif;
+        font-size: 20px;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #111;
+    }
+
+    .load-more { text-align: center; margin-top: 80px; }
+    .btn-outline {
+        border: 1px solid #111; color: #111;
+        padding: 18px 50px; font-family: 'Inter', sans-serif; font-size: 12px;
+        letter-spacing: 2px; font-weight: 600; cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+        .products-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+        .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<script is:inline define:vars={{ products, lang, attrTranslations }}>
+    class ProductFilter {
+        constructor() {
+            this.allProducts = products;
+            this.filteredProducts = [];
+            this.visibleCount = 16;
+            this.activeCat = 'all';
+            this.modestOnly = false;
+            this.currentLang = lang;
+
+            this.grid = document.getElementById('products-grid');
+            this.loadMoreBtn = document.getElementById('load-more-btn');
+            this.countEl = document.getElementById('product-count');
+            this.pills = document.querySelectorAll('.cat-pill');
+            this.modestToggle = document.getElementById('modest-toggle');
+            
+            this.lightbox = document.getElementById('product-lightbox');
+            this.mainSwiper = null;
+            this.thumbsSwiper = null;
+
+            this.init();
+        }
+
+        catNormalize(s) {
+            return String(s)
+                .toLowerCase()
+                .replace(/ş/g, 's').replace(/Ş/g, 's')
+                .replace(/ı/g, 'i').replace(/İ/g, 'i').replace(/I/g, 'i')
+                .replace(/ö/g, 'o').replace(/Ö/g, 'o')
+                .replace(/ü/g, 'u').replace(/Ü/g, 'u')
+                .replace(/ç/g, 'c').replace(/Ç/g, 'c')
+                .replace(/ğ/g, 'g').replace(/Ğ/g, 'g')
+                .replace(/-/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        getProductCategories(p) {
+            let cats = [];
+            if (p.category && typeof p.category === 'string') {
+                p.category.split(',').forEach(c => cats.push(c.trim()));
+            }
+            if (Array.isArray(p.categories)) {
+                p.categories.forEach(c => {
+                    if (typeof c === 'string') {
+                        c.split(',').forEach(s => cats.push(s.trim()));
+                    } else if (c && c.slug) cats.push(c.slug);
+                      else if (c && c.name) cats.push(c.name);
+                });
+            }
+            return [...new Set(cats.filter(Boolean).map(c => this.catNormalize(c)))];
+        }
+
+        init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            this.activeCat = urlParams.get('cat') || 'all';
+            const modestParam = urlParams.get('modest');
+            this.modestOnly = modestParam === 'true' ? true : modestParam === 'false' ? false : null;
+
+            // Pill clicks
+            this.pills.forEach(pill => {
+                const cat = pill.getAttribute('data-category');
+                if (this.catNormalize(cat) === this.catNormalize(this.activeCat)) {
+                    pill.classList.add('active');
+                }
+
+                pill.onclick = () => {
+                    this.pills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    this.activeCat = cat;
+                    this.visibleCount = 16;
+                    this.updateURL();
+                    this.applyFilters();
+                };
+            });
+
+            // Modest toggle (3 states: null=all, true=ON/Evet, false=OFF/Hayir)
+            if (this.modestToggle) {
+                this._updateModestBtn();
+                this.modestToggle.onclick = () => {
+                    // Cycle: null -> true -> false -> null
+                    if (this.modestOnly === null) this.modestOnly = true;
+                    else if (this.modestOnly === true) this.modestOnly = false;
+                    else this.modestOnly = null;
+                    this._updateModestBtn();
+                    this.visibleCount = 16;
+                    this.updateURL();
+                    this.applyFilters();
+                };
+            }
+
+            // Load more
+            if (this.loadMoreBtn) {
+                this.loadMoreBtn.onclick = () => {
+                    this.visibleCount += 16;
+                    this.renderGrid();
+                };
+            }
+
+            // Lightbox close
+            const closeBtn = this.lightbox.querySelector('.close-lightbox');
+            if (closeBtn) closeBtn.onclick = () => this.closeLightbox();
+            this.lightbox.onclick = (e) => {
+                if (e.target === this.lightbox) this.closeLightbox();
+            };
+
+            this.applyFilters();
+        }
+
+        _updateModestBtn() {
+            if (!this.modestToggle) return;
+            this.modestToggle.classList.remove('active', 'modest-off');
+            if (this.modestOnly === true) {
+                this.modestToggle.classList.add('active');
+                this.modestToggle.textContent = this.modestToggle.dataset.on || 'TESETTÜR UYUMU: ON';
+            } else if (this.modestOnly === false) {
+                this.modestToggle.classList.add('modest-off');
+                this.modestToggle.textContent = this.modestToggle.dataset.off || 'TESETTÜR UYUMU: OFF';
+            } else {
+                this.modestToggle.textContent = this.modestToggle.dataset.label || 'TESETTÜR UYUMU';
+            }
+        }
+
+        updateURL() {
+            const url = new URL(window.location);
+            url.searchParams.set('cat', this.activeCat);
+            if (this.modestOnly === null) {
+                url.searchParams.delete('modest');
+            } else {
+                url.searchParams.set('modest', this.modestOnly);
+            }
+            window.history.pushState({}, '', url);
+        }
+
+        openLightbox(productId) {
+            const product = this.allProducts.find(p => p.id === productId || p.id == productId);
+            if (!product) return;
+
+            this.renderLightbox(product);
+            
+            this.lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            if (this.thumbsSwiper) this.thumbsSwiper.destroy();
+            if (this.mainSwiper) this.mainSwiper.destroy();
+
+            this.thumbsSwiper = new Swiper(".lb-thumbs-swiper", {
+                spaceBetween: 10,
+                slidesPerView: 5,
+                freeMode: true,
+                watchSlidesProgress: true,
+            });
+
+            this.mainSwiper = new Swiper(".lb-main-swiper", {
+                loop: (product.images && product.images.length > 1),
+                speed: 800,
+                slidesPerView: 1,
+                thumbs: {
+                    swiper: this.thumbsSwiper,
+                },
+                navigation: {
+                    nextEl: ".lb-next",
+                    prevEl: ".lb-prev",
+                }
+            });
+        }
+
+        renderLightbox(product) {
+            const lbWrapper = document.getElementById('lb-swiper-wrapper');
+            const lbThumbsWrapper = document.getElementById('lb-thumbs-wrapper');
+            const lbTitle = document.getElementById('lb-title');
+            const lbDesc = document.getElementById('lb-desc');
+            const lbAttrs = document.getElementById('lb-attributes');
+            const lbActions = document.getElementById('lb-actions');
+
+            const images = product.images || (product.image ? [{ src: product.image }] : []);
+            const displayName = (product.title[this.currentLang] || product.title.tr || product.productName || "Model").split(' ')[0].toUpperCase();
+
+            lbWrapper.innerHTML = images.map(img => `
+                <div class="swiper-slide"><img src="${img.src}" alt="${displayName}"></div>
+            `).join('');
+
+            lbThumbsWrapper.innerHTML = images.map(img => `
+                <div class="swiper-slide"><img src="${img.src}" alt="thumb"></div>
+            `).join('');
+
+            lbTitle.innerText = displayName;
+            
+            let descStr = product.shortDescription?.[this.currentLang] || product.shortDescription?.tr || "";
+            if (Array.isArray(descStr)) descStr = descStr.map(b => b.children ? b.children.map(c => c.text).join('') : '').join(' ');
+            
+            const words = String(descStr).split(/\s+/);
+            const truncated = words.length > 50 ? words.slice(0, 50).join(' ') + '...' : descStr;
+            lbDesc.innerText = truncated;
+
+            const attrKeys = ["Etek Kesimi", "Kumaş", "Kol", "Yaka", "Tesettür Uyumu"];
+            lbAttrs.innerHTML = attrKeys.map(key => {
+                const val = (product.mappedAttributes || {})[key];
+                if (!val || val === 'Hayır') return '';
+                
+                // Translate key and value
+                const tKey = (attrTranslations[this.currentLang] && attrTranslations[this.currentLang][key]) || key;
+                const tVal = String(val).split(',').map(v => {
+                    const trimmed = v.trim();
+                    return (attrTranslations[this.currentLang] && attrTranslations[this.currentLang][trimmed]) || trimmed;
+                }).join(', ');
+
+                return `<div class="lb-attr"><label>${tKey}</label><span>${tVal}</span></div>`;
+            }).join('');
+
+            const origin = window.location.origin;
+            const productUrl = `${origin}/${this.currentLang}/product/${product.slug || product.id}`;
+            
+            // Localize message
+            let waMsgTemplate = "Hello, I would like to get information about the {model} model.\n\nProduct Link: {url}";
+            if (this.currentLang === 'es') waMsgTemplate = "Hola, me gustaría recibir información sobre el modelo {model}.\n\nEnlace del producto: {url}";
+            else if (this.currentLang === 'tr') waMsgTemplate = "Merhaba, {model} modeli hakkında bilgi almak istiyorum.\n\nÜrün Linki: {url}";
+            
+            const waText = waMsgTemplate.replace('{model}', displayName).replace('{url}', productUrl);
+
+            lbActions.innerHTML = `
+                <a href="${productUrl}" class="actions-item-btn btn-dark">${displayName} →</a>
+                <a href="https://wa.me/34632623300?text=${encodeURIComponent(waText)}" target="_blank" class="actions-item-btn btn-outline-dark">WHATSAPP</a>
+            `;
+        }
+
+        closeLightbox() {
+            this.lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        applyFilters() {
+            const target = this.catNormalize(this.activeCat);
+            
+            // 1. Initial filter based on draft status
+            let baseProducts = this.allProducts.filter(p => p.status !== 'draft');
+
+            // 2. Recency sorting logic (SKU Descending)
+            const sortBySku = (a, b) => {
+                const skuA = (a.sku || '').toUpperCase();
+                const skuB = (b.sku || '').toUpperCase();
+                return skuB.localeCompare(skuA);
+            };
+
+            if (target === 'all') {
+                // HIERARCHICAL SORTING
+                // 1. Gelinlik (8 newest)
+                // 2. Tesettür Gelinlik (8 newest)
+                // 3. After Party (8 newest)
+                // 4. Abiye (8 newest)
+                // 5. Others
+
+                const getCatMatches = (p, catKey) => {
+                    const pCats = this.getProductCategories(p);
+                    if (catKey === 'gelinlik') {
+                        return pCats.some(c => c === 'gelinlik' || c === 'wedding-gown' || c === 'wedding gown' || c === 'nikah');
+                    }
+                    if (catKey === 'tesettur-gelinlik') {
+                        return pCats.some(c => c === 'tesettur-gelinlik' || c === 'tesettur gelinlik');
+                    }
+                    if (catKey === 'after-party') {
+                        return pCats.some(c => c === 'after-party' || c === 'after party');
+                    }
+                    if (catKey === 'abiye') {
+                        return pCats.some(c => c === 'abiye' || c === 'noche' || c === 'evening');
+                    }
+                    return false;
+                };
+
+                const sortedAll = [...baseProducts].sort(sortBySku);
+                
+                const selectedIds = new Set();
+                const finalOrder = [];
+
+                const addGroup = (catKey) => {
+                    const group = sortedAll.filter(p => !selectedIds.has(p.id) && getCatMatches(p, catKey)).slice(0, 8);
+                    group.forEach(p => {
+                        finalOrder.push(p);
+                        selectedIds.add(p.id);
+                    });
+                };
+
+                addGroup('gelinlik');
+                addGroup('tesettur-gelinlik');
+                addGroup('after-party');
+                addGroup('abiye');
+
+                // Add remaining
+                const remaining = sortedAll.filter(p => !selectedIds.has(p.id));
+                finalOrder.push(...remaining);
+
+                this.filteredProducts = finalOrder;
+
+            } else {
+                // STANDARD FILTERING per category
+                this.filteredProducts = baseProducts.filter(p => {
+                    const pCats = this.getProductCategories(p);
+                    if (target === 'gelinlik') {
+                        return pCats.some(c =>
+                            c === 'gelinlik' || c === 'wedding gown' || c === 'wedding-gown' ||
+                            c === 'nikah elbisesi' || c === 'nikah-elbisesi'
+                        );
+                    } else if (target === 'tesettur gelinlik') {
+                        // Virtual category: Bridal + Modest
+                        const isGelinlik = pCats.some(c =>
+                            c === 'gelinlik' || c === 'wedding gown' || c === 'wedding-gown' ||
+                            c === 'nikah elbisesi' || c === 'nikah-elbisesi' ||
+                            c === 'tesettur-gelinlik' || c === 'tesettur gelinlik'
+                        );
+                        const isModest = p.isModest === true ||
+                                         p.isModest === 'true' ||
+                                         p.isModest === 'yes' ||
+                                         (p.mappedAttributes && (
+                                             p.mappedAttributes['Tesettür Uyumu'] === 'Evet' ||
+                                             p.mappedAttributes['Tesettür Uyumu'] === 'Yes'
+                                         ));
+                        return isGelinlik && isModest;
+                    } else if (target === 'nisan gelinlik' || target === 'nisan-gelinlik' || target === 'nisan elbisesi' || target === 'nisan-elbisesi') {
+                        return pCats.some(c =>
+                            c === 'nisan elbisesi' || c === 'nisan-elbisesi' ||
+                            c === 'soz elbisesi' || c === 'soz-elbisesi' ||
+                            c === 'nisan' || c === 'soz'
+                        );
+                    } else {
+                        return pCats.some(c => c === target || c.includes(target));
+                    }
+                }).sort(sortBySku);
+            }
+
+            // 3. APPLY MODEST TOGGLE FILTER on the result
+            if (this.modestOnly !== null) {
+                this.filteredProducts = this.filteredProducts.filter(p => {
+                    const isModest = p.isModest === true ||
+                                     p.isModest === 'true' ||
+                                     p.isModest === 'yes' ||
+                                     (p.mappedAttributes && (
+                                         p.mappedAttributes['Tesettür Uyumu'] === 'Evet' ||
+                                         p.mappedAttributes['Tesettür Uyumu'] === 'Yes'
+                                     ));
+                    if (this.modestOnly === true && !isModest) return false;
+                    if (this.modestOnly === false && isModest) return false;
+                    return true;
+                });
+            }
+
+            if (this.countEl) this.countEl.innerText = this.filteredProducts.length;
+            this.renderGrid();
+        }
+
+        renderGrid() {
+            if (!this.grid) return;
+            const toShow = this.filteredProducts.slice(0, this.visibleCount);
+
+            if (toShow.length === 0) {
+                this.grid.innerHTML = '<div class="no-products" style="padding: 100px; text-align: center; color: #666; font-family: Italiana;">NO PRODUCTS FOUND</div>';
+            } else {
+                this.grid.innerHTML = toShow.map(p => {
+                    const trName = p.title[this.currentLang] || p.title.tr || p.productName || "Model";
+                    const displayName = String(trName).trim().split(' ')[0].toUpperCase();
+                    const img = p.image || (p.images && p.images[0] ? p.images[0].src : '/img/placeholder.jpg');
+                    const sku = p.sku || '';
+
+                    const slug = p.slug || p.id;
+                    const productLink = `/${this.currentLang}/product/${slug}`;
+                    const previewText = this.currentLang === 'tr' ? 'ÖNİZLEME' : (this.currentLang === 'es' ? 'VISTA PREVIA' : 'PREVIEW');
+                    const detailsText = this.currentLang === 'tr' ? 'DETAYLAR' : (this.currentLang === 'es' ? 'DETALLES' : 'DETAILS');
+
+                    return `
+                        <div class="product-card">
+                            <div class="product-card__image">
+                                <img src="${img}" alt="${displayName}" loading="lazy">
+                                <div class="product-card__actions">
+                                    <button class="action-btn preview-btn" onclick="event.stopPropagation(); window.shopFilter.openLightbox('${p.id}')">${previewText}</button>
+                                    <a href="${productLink}" class="action-btn details-btn">${detailsText}</a>
+                                </div>
+                            </div>
+                            <div class="product-card__info">
+                                <span class="product-card__sku">${sku}</span>
+                                <h3 class="product-card__title">${displayName}</h3>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            if (this.loadMoreBtn) {
+                this.loadMoreBtn.style.display = (this.visibleCount < this.filteredProducts.length) ? 'inline-block' : 'none';
+            }
+        }
+    }
+
+    window.shopFilter = new ProductFilter();
+</script>

@@ -1,0 +1,153 @@
+---
+const { title, description, lang = "es", image = "/favicon.png" } = Astro.props;
+import '../../src/assets/scss/style.css'; 
+import { ViewTransitions } from 'astro:transitions';
+import CookieConsent from '../components/CookieConsent.astro';
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    
+    <!-- Google Tag Manager -->
+    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P8D4BF5G');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- SEO & OpenGraph -->
+    <title>{title || 'Mina Lidya - Luxury Bridal'}</title>
+    <meta name="title" content={title || 'Mina Lidya - Luxury Bridal'} />
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title || 'Mina Lidya - Luxury Bridal'} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+    <meta property="og:site_name" content="Mina Lidya Couture" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title || 'Mina Lidya - Luxury Bridal'} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Open+Sans:ital,wght@0,200&family=Italianno&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style is:global>
+        @font-face {
+            font-family: 'Italiana';
+            src: url('/fonts/Italiana.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        .main-logo-text {
+            font-family: 'Italiana', serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em; /* Azaltıldı */
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+            font-size: 64px; /* Büyütüldü (52'den 64'e) */
+            color: #000;
+        }
+        .alta-costura-tag {
+            font-family: 'Italiana', serif !important;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 2px;
+            display: block;
+            color: #9c9c9c;
+            text-align: left; /* Sola hizalı */
+            width: 100%;
+        }
+        .header__logo .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Sola yaslı */
+            text-decoration: none;
+        }
+    </style>
+    <ViewTransitions />
+    
+    <script is:inline>
+        // Elite Tracking Analytics for Mina Lidya
+        (function() {
+            const trackVisit = async () => {
+                const sessionId = sessionStorage.getItem('mina_session_id') || Math.random().toString(36).substring(2);
+                sessionStorage.setItem('mina_session_id', sessionId);
+                
+                // Track start time for duration calculation
+                const startTime = Date.now();
+                
+                try {
+                    // Try to get GeoIP data locally
+                    const geoReq = await fetch('https://ipapi.co/json/');
+                    const geo = await geoReq.json();
+                    
+                    const visitData = {
+                        id: sessionId,
+                        path: window.location.pathname,
+                        referrer: document.referrer,
+                        screen: `${window.innerWidth}x${window.innerHeight}`,
+                        country: geo.country_name || 'Unknown',
+                        city: geo.city || 'Unknown',
+                        timestamp: new Date().toISOString(),
+                        duration: 0
+                    };
+                    
+                    // Store in localStorage logs (Simulated Database for now)
+                    let logs = JSON.parse(localStorage.getItem('mina_elite_analytics') || '[]');
+                    
+                    // Simple logic to keep record for current session
+                    const existingIdx = logs.findIndex(l => l.id === sessionId && l.path === visitData.path);
+                    if (existingIdx === -1) {
+                        logs.push(visitData);
+                    }
+                    
+                    localStorage.setItem('mina_elite_analytics', JSON.stringify(logs));
+                    
+                    // Heartbeat to track duration
+                    setInterval(() => {
+                        let currentLogs = JSON.parse(localStorage.getItem('mina_elite_analytics') || '[]');
+                        const idx = currentLogs.findIndex(l => l.id === sessionId && l.path === visitData.path);
+                        if (idx !== -1) {
+                            currentLogs[idx].duration = Math.floor((Date.now() - startTime) / 1000);
+                            localStorage.setItem('mina_elite_analytics', JSON.stringify(currentLogs));
+                        }
+                    }, 5000);
+                    
+                } catch (e) {
+                    console.log('Mina Analytics: Silent logging mode active.');
+                }
+            };
+            
+            if (typeof window !== 'undefined') {
+                trackVisit();
+            }
+        })();
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8D4BF5G"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <slot />
+    <CookieConsent lang={lang} />
+    
+    {/* Removed non-existent jQuery and legacy footer scripts to prevent console errors */}
+    <script is:inline src="/js/burger.js"></script>
+    <script is:inline src="/js/modal-about.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Open+Sans:ital,wght@0,200&display=swap');
+
+*::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #445ede;
+  background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-gray-300;
+}
+
+*::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #fefefe;
+  background-color: #F5F5F5;
+}
+
+body {
+  font-family: 'Playfair Display', serif;
+  @apply text-gray-700 text-base;
+}
+
+input,
+select,
+textarea {
+  @apply outline-none;
+}
+
+.td-container {
+  @apply max-w-screen-2xl mx-auto px-8;
+}
+
+.bg-main-color {
+  @apply bg-gray-50;
+}
+
+.white-space-break-spaces {
+  white-space: break-spaces;
+}
+
+.task-description::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.task-description {
+  @apply p-6 border-b max-h-[585px] overflow-auto white-space-break-spaces leading-6;
+}
+
+.task-description pre {
+  @apply bg-gray-100 overflow-auto p-2;
+}
+
+.task-description b {
+  @apply font-semibold;
+}
+
+.task-description a {
+  @apply text-sky-700 underline;
+}
+
+.task-description h3 {
+  @apply text-[16px] font-semibold inline;
+}
+
+.task-description li {
+  @apply leading-[18px] before:-ml-2 pl-2;
+}
+
+.sortable-placeholder {
+  @apply w-[240px] bg-white border-2 border-dashed h-24;
+  flex: 0 0 240px;
+}
+.h-6 {
+  height: 3.5rem;
+}
+.text-lg {
+  font-size: 2.725rem !important;
+  padding: 55px 0;
+  font-family: 'Cinzel', serif;
+}
+.font-medium {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .text-lg {
+    font-size: 2rem !important;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+}

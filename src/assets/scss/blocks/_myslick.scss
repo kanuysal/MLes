@@ -1,0 +1,65 @@
+
+  /* Slider Images */
+  .single-item {
+    width: 90%;
+    max-width: 720px;
+    margin: 0 auto; /* Center the slider */
+
+
+    img  {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+  }
+
+
+  /* Slider Images TENDANCES MODE*/
+
+  .single-item--trend {
+    width: 100%;
+    max-width: 662px;
+    margin: 0 auto; /* Center the slider */
+
+
+    img  {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+  }
+    /* END Slider Images TENDANCES MODE*/
+
+
+  .single-item--rel {
+    position: relative;
+  }
+  .single-item--desc {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px;
+  }
+
+  .slick-dots li button:before {
+    font-size: 8px !important;
+  }
+  .slick-dots li {
+    margin: 0 -1px !important; /* Adjust the margin to bring dots closer */
+  }
+  
+
+@media (max-width: 768px) {
+    .single-item {
+        width: 100%;
+
+        img {
+            max-width: 100%;
+ 
+        }
+    }
+}
+

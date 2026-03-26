@@ -1,0 +1,95 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+
+const modaCategories = [
+    { label: t('cat.gelinlik'), href: `/${lang}/shop?cat=gelinlik` },
+    { label: t('cat.modest'), href: `/${lang}/shop?cat=tesettur-gelinlik` },
+    { label: t('cat.nisan'), href: `/${lang}/shop?cat=nisan-elbisesi` },
+    { label: t('cat.soz'), href: `/${lang}/shop?cat=soz-elbisesi` },
+    { label: t('cat.kina'), href: `/${lang}/shop?cat=kina-elbisesi` },
+    { label: t('cat.party'), href: `/${lang}/shop?cat=after-party` },
+    { label: t('cat.abiye'), href: `/${lang}/shop?cat=abiye` },
+    { label: t('cat.kaftan'), href: `/${lang}/shop?cat=kaftan` },
+    { label: t('cat.salvar'), href: `/${lang}/shop?cat=salvar` },
+    { label: t('cat.plus'), href: `/${lang}/shop?cat=buyuk-beden` },
+    { label: t('cat.outlet'), href: `/${lang}/shop?cat=outlet` }
+];
+---
+
+<section class="category-nav">
+    <div class="category-nav-inner">
+        <div class="category-nav__group">
+            <h2 class="category-nav__title">{lang === 'es' ? 'Colecciones' : (lang === 'tr' ? 'Koleksiyonlar' : 'Collections')}</h2>
+            <ul class="category-nav__list">
+                {modaCategories.map((cat) => (
+                    <li><a href={cat.href}>{cat.label}</a></li>
+                ))}
+            </ul>
+        </div>
+    </div>
+</section>
+
+<style>
+    .category-nav {
+        padding: 60px 0;
+        background-color: #f7f7f7; /* Açık gri */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .category-nav-inner {
+        max-width: 1230px;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .category-nav__group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .category-nav__title {
+        font-family: 'Italiana', serif;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: #9c9c9c;
+        margin-bottom: 25px;
+    }
+    .category-nav__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    .category-nav__list li a {
+        font-family: 'Italiana', serif;
+        font-size: 19px;
+        text-decoration: none;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.4s ease;
+        opacity: 0.8;
+    }
+    .category-nav__list li a:hover {
+        color: #000;
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+    .margin-top-20 {
+        margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+        .category-nav { padding: 40px 0; }
+        .category-nav__list { gap: 15px 20px; }
+        .category-nav__list li a { font-size: 15px; }
+        .margin-top-20 { margin-top: 30px; }
+    }
+</style>

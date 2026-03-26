@@ -1,0 +1,70 @@
+.hslider {
+    &__wrapper {
+        height: 600px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        //border-radius: 20px;
+        //box-shadow: 0 0 20px 10px #0000002f, 0 0 10px 5px #00000017;
+    }
+    &__item {
+        height: 100%;
+        width: 500%;
+        display: flex;
+        position: relative;
+
+        &::after {
+            //content:'Galia Lahav \A "Don\0027t tell"';
+            content:'Photos de mariage \A de Luxe - Le Guide';
+            white-space: pre;
+            color: $color-3;
+            font-family: $font-serif;
+            font-size: 48px;
+            position: absolute;
+            bottom: 100px;
+            left: 50px;
+            z-index: 99;
+            width: 100%;
+            height: 10%;
+        }
+    }
+    &__item-img {
+        position: relative;
+        flex: 0 0 20%;
+        max-width: 20%;
+        animation: slide 20s infinite ease-in-out;
+
+     
+    }
+    .hslider__item:hover .hslider__item-img {
+        animation-play-state: paused;
+      }
+
+
+@keyframes slide {
+    0% {
+      left: 0;
+    }
+    20% {
+      left: -20%;
+    }
+    40% {
+      left: -40%;
+    }
+    60% {
+      left: -60%;
+    }
+    80% {
+      left: -80%;
+    }
+    100% {
+      left: -100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .hslider {
+    display: none;
+  }
+}

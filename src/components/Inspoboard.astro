@@ -1,0 +1,51 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+
+const currentCategories = [
+    { name: t('nav.boutique'), href: `/${lang}/lookbook/` },
+    { name: t('nav.atellier'), href: `/${lang}/atelier/` },
+    { name: t('nav.couture'), href: `/${lang}/online-couture/` },
+    { name: t('nav.alta_costura'), href: `/${lang}/alta-costura/` }
+];
+
+const labels = {
+    es: { title: 'Inspiración Mina Lidya', subtitle: 'Explora nuestro mundo de lujo' },
+    en: { title: 'Mina Lidya Inspiration', subtitle: 'Explore our curated world of luxury' },
+    tr: { title: 'Mina Lidya İlham', subtitle: 'Lüks dünyamızı keşfedin' },
+    fr: { title: 'Inspiration Mina Lidya', subtitle: 'Explorez notre univers de luxe' },
+    de: { title: 'Mina Lidya Inspiration', subtitle: 'Entdecken Sie unsere Luxuswelt' },
+    it: { title: 'Ispirazione Mina Lidya', subtitle: 'Esplora il nostro mondo di lusso' },
+    nl: { title: 'Mina Lidya Inspiratie', subtitle: 'Ontdek onze luxewereld' },
+    ru: { title: 'Вдохновение Mina Lidya', subtitle: 'Исследуйте наш мир роскоши' }
+};
+
+const currentLabels = labels[lang] || labels.en;
+---
+
+<section class="inspoboard" style="background:#f0f0f0; margin-top: 50px; padding: 100px 0; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div class="inspoboard__wrapper" style="width: 100%; max-width: 1400px; text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <h2 style="color: #000; font-family: 'Italiana', serif; font-size: 32px; margin-bottom: 40px; text-align: center; width: 100%;">{currentLabels.title}</h2>
+        <div class="inspoboard__intro" style="width: 100%; display: flex; justify-content: center; align-items: center;">
+            <div class="inspoboard__intro-items" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 60px; list-style: none; padding: 0; width: 100%;">
+                {currentCategories.map((item) => (
+                    <div style="font-family: 'Cinzel', serif; font-size: 20px; text-align: center;">
+                        <a style="color: #6a5921; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;" href={item.href}>{item.name}</a> 
+                    </div>
+                ))}
+            </div>
+        </div>
+        <h3 style="color: #4D4D4D; margin-top: 50px; font-weight: 300; letter-spacing: 3px; font-family: 'Inter', sans-serif; font-size: 15px; text-transform: uppercase; text-align: center; width: 100%;">{currentLabels.subtitle}</h3>
+    </div>
+</section>
+
+<style>
+    .inspoboard__wrapper {
+        text-align: center;
+    }
+    .inspoboard__intro-items a:hover {
+        color: #000 !important;
+        text-decoration: underline !important;
+    }
+</style>

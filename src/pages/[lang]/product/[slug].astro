@@ -1,0 +1,861 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { useTranslations } from '../../../i18n/utils';
+import { attrTranslations } from '../../../i18n/ui';
+import products from '../../../data/products.json';
+
+export async function getStaticPaths() {
+  const languages = ['en', 'es', 'tr', 'fr', 'de', 'nl', 'it', 'ru'];
+  return languages.flatMap((lang) =>
+    products.map((product) => ({
+      params: { lang, slug: product.slug || product.id.toString() },
+      props: { product },
+    }))
+  );
+}
+
+const { lang, slug } = Astro.params;
+const { product } = Astro.props;
+const t = useTranslations(lang);
+
+const turkishTitle = product.title?.tr || product.productName || product.name || 'Model';
+const modelName = String(turkishTitle).trim().split(' ')[0].toUpperCase();
+const images = product.images || (product.image ? [{ src: product.image }] : []);
+const sku = product.sku || '';
+const attributes = product.mappedAttributes || {};
+const shortDesc = product.shortDescription?.[lang] || product.shortDescription?.tr || '';
+const categories = product.categories || [];
+const firstCategory = typeof categories[0] === 'string' ? categories[0] : (categories[0]?.slug || product.category || 'gelinlik');
+const mainImg = images[0]?.src || '';
+const waMsgTemplate = t('wa.message') || 'Hello, I would like to get information about the {model} model.\n\nProduct Link: {url}';
+const waText = encodeURIComponent(waMsgTemplate.replace('{model}', modelName).replace('{url}', Astro.url.toString()));
+const waPhone = '34632623300';
+---
+
+<Layout title={`${modelName} | Mina Lidya`} description={shortDesc} lang={lang} image={mainImg}>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <Header />
+
+  <main class="single-product-page">
+    <div class="product-main-container">
+      <div class="product-split-layout">
+
+        <!-- LEFT: MEDIA GALLERY (exact ref structure) -->
+        <div class="product-media-col">
+          <div class="media-sidebar" id="thumbnails-container">
+            {images.map((img, i) => (
+              <div class={`side-thumb ${i === 0 ? 'active' : ''}`} data-index={i}>
+                <img src={img.src} alt={`${modelName} - ${i+1}`} loading="lazy" />
+              </div>
+            ))}
+          </div>
+
+          <div class="media-main-content">
+            <div class="main-media-view" id="gallery-stage">
+              {images.map((img, i) => (
+                <div class="gallery-image-wrap">
+                  <img src={img.src} id={`img-${i}`} data-index={i} alt={modelName} loading={i === 0 ? 'eager' : 'lazy'} />
+                </div>
+              ))}
+            </div>
+            <!-- Mobile pagination dots -->
+            <div class="mobile-gallery-pagination" id="mobile-dots">
+              {images.map((_, i) => (
+                <div class={`dot ${i === 0 ? 'active' : ''}`} data-index={i}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: INFO (exact ref structure) -->
+        <div class="product-info-col">
+          <!-- Breadcrumbs -->
+          <nav class="breadcrumbs sp-breadcrumbs">
+            <a href={lang === 'es' ? '/' : `/${lang}/`}>{t('nav.home')}</a>
+            <span class="sep"> / </span>
+            <a href={`/${lang}/shop?cat=${firstCategory}`}>{firstCategory.toUpperCase()}</a>
+            <span class="sep"> / </span>
+            <span>{modelName}</span>
+          </nav>
+
+          <h1 class="product-title">{modelName}</h1>
+          <span class="product-sku-label">{sku}</span>
+
+          <div class="product-short-desc">
+            {shortDesc}
+          </div>
+
+          <!-- CTA Buttons (ref structure) -->
+          <div class="product-actions">
+            <div class="action-btns-row">
+              <a href={`https://wa.me/${waPhone}?text=${waText}`} target="_blank" class="btn-secondary-minimal">
+                <i class="fa-brands fa-whatsapp"></i> {t('product.consult')}
+              </a>
+              <a href={`/${lang}/shop`} class="btn-primary-outline">
+                ← {t('product.collection')}
+              </a>
+            </div>
+          </div>
+
+          <!-- Attributes (ref structure) -->
+          {Object.keys(attributes).length > 0 && (
+            <div class="product-attributes-list">
+              {Object.entries(attributes).map(([key, val]) => {
+                const translatedKey = (attrTranslations[lang] && attrTranslations[lang][key]) || key;
+                // Value translation: split by comma if multiple values
+                const translatedVal = String(val).split(',').map(v => {
+                  const trimmed = v.trim();
+                  return (attrTranslations[lang] && attrTranslations[lang][trimmed]) || trimmed;
+                }).join(', ');
+
+                return (
+                  <div class="attr-row">
+                    <span class="attr-name">{translatedKey}</span>
+                    <span class="attr-value">{translatedVal}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <!-- Accordion (ref structure) -->
+          <div class="product-accordion">
+            <div class="acc-item active">
+              <div class="acc-head">
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>{lang === 'tr' ? 'Ölçü Rehberi' : (lang === 'es' ? 'Guía de Tallas' : 'Size Guide')}</span>
+              </div>
+              <div class="acc-body">
+                <p>{lang === 'tr' ? 'Doğru ölçü alımı, kusursuz bir dikim için en önemli adımdır.' : (lang === 'es' ? 'Una medición correcta es el paso más importante para una costura perfecta.' : 'Correct measurements are the most important step for a perfect fit.')}</p>
+              </div>
+            </div>
+            <div class="acc-item">
+              <div class="acc-head">
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>{lang === 'tr' ? 'Süreç & Teslimat' : (lang === 'es' ? 'Proceso & Entrega' : 'Process & Delivery')}</span>
+              </div>
+              <div class="acc-body">
+                <p>{lang === 'tr' ? 'Kişiye özel dikim sürecimiz ortalama 6-8 hafta sürmektedir. Tüm dünyaya sigortalı kargo ile gönderim yapılmaktadır.' : (lang === 'es' ? 'Nuestro proceso de confección personalizada tarda entre 6 y 8 semanas.' : 'Our bespoke tailoring process takes approximately 6-8 weeks.')}</p>
+              </div>
+            </div>
+            <div class="acc-item">
+              <div class="acc-head">
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>{t('product.returns')}</span>
+              </div>
+              <div class="acc-body">
+                <p>{lang === 'tr' ? 'Özel dikim ürünlerde iade kabul edilmemektedir. Tüm kalite kontrolleri titizlikle yapılmakta ve süreç boyunca görsel onay alınmaktadır.' : (lang === 'es' ? 'Los artículos de confección personalizada no son reembolsables.' : 'Custom-made items are non-refundable. Visual approvals are taken throughout the process.')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- SEO CONTENT SECTION (exact ref) -->
+  <section class="seo-content-section">
+    <div class="container">
+      <h2>
+        {lang === 'tr' ? 'Mina Lidya Couture Deneyimi' : (lang === 'es' ? 'Experiencia Mina Lidya Couture' : 'The Mina Lidya Couture Experience')}
+      </h2>
+      <p>
+        {lang === 'tr'
+          ? 'Online Couture hizmetimizle, hayallerinizdeki gelinliği dünyanın her yerinden tasarlatabilirsiniz. Bursa\'daki global üretim merkezimiz ve Valencia\'daki tasarım ofisimizle, Haute Couture standartlarını dijital dünyaya taşıyoruz.'
+          : (lang === 'es'
+            ? 'Con nuestro servicio de Online Couture, puede diseñar el vestido de novia de sus sueños desde cualquier parte del mundo.'
+            : 'With our Online Couture service, you can design your dream bridal gown from anywhere in the world. Our global production center in Bursa and design office in Valencia bring Haute Couture standards to the digital world.')
+        }
+      </p>
+      <p>
+        {lang === 'tr'
+          ? 'Her bir Mina Lidya tasarımı, sadece bir gelinlik değil; içinde aşkı, özeni ve ustalığı barındıran bir sanat eseridir. 2026 koleksiyonumuzda kullandığımız sürdürülebilir kumaşlar ve el işçiliği detaylarla, modern gelinin tüm beklentilerini karşılıyoruz.'
+          : (lang === 'es'
+            ? 'Cada diseño de Mina Lidya es más que un vestido de novia; es una obra de arte que contiene amor, cuidado y maestría.'
+            : 'Every Mina Lidya design is more than just a wedding gown — it is a work of art containing love, care and mastery. Our 2026 collection meets all the expectations of the modern bride.')
+        }
+      </p>
+    </div>
+  </section>
+
+  <!-- FULL WIDTH VIDEO SECTION (exact ref) -->
+  <section class="full-width-video">
+    <video autoplay muted loop playsinline>
+      <source src="/assets/video1.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <!-- RELATED PRODUCTS (exact ref using static products from same category) -->
+  <section class="related-products">
+    <div class="container">
+      <h3>
+        {t('product.related_title')}
+      </h3>
+      <div id="related-grid" class="related-grid">
+        {products
+          .filter(p => {
+            if (p.id === product.id || p.status === 'draft') return false;
+            const pCats = (p.categories || []).map((c: any) => typeof c === 'string' ? c : (c?.slug || c?.name || '')).join(',').toLowerCase();
+            return pCats.includes(firstCategory.toLowerCase());
+          })
+          .slice(0, 8)
+          .map(p => {
+            const pImg = p.images?.[0]?.src || p.image || '/img/placeholder.jpg';
+            const pName = (p.title?.[lang] || p.title?.tr || p.productName || 'Model').split(' ')[0].toUpperCase();
+            const pSlug = p.slug || p.id;
+            const pAttr = (p.mappedAttributes as any)?.['Etek Kesimi'] || 'Couture';
+            return (
+              <div class="related-card">
+                <a href={`/${lang}/product/${pSlug}`} class="related-card-link">
+                  <div class="related-card-img">
+                    <img src={pImg} alt={pName} loading="lazy" />
+                  </div>
+                  <div class="related-card-info">
+                    <h4>{pName}</h4>
+                    <p>{pAttr}</p>
+                  </div>
+                </a>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOM DESIGN CTA (exact ref) -->
+  <section class="custom-design-cta">
+    <div class="container">
+      <h2 class="cta-title">
+        {t('product.not_found')}
+      </h2>
+      <p class="cta-subtitle">
+        {lang === 'tr'
+          ? 'Beğendiğiniz gelinlik görsellerini paylaşın ya da bize anlatın, hayalinizdeki tasarımı sizin için beraber gerçeğe dönüştürelim.'
+          : (lang === 'es'
+            ? 'Comparta sus imágenes favoritas o descríbanos su visión, y crearemos juntos el diseño de sus sueños.'
+            : 'Share your favorite bridal images or describe your vision, and together we will bring your dream design to life.')
+        }
+      </p>
+      <a
+        href={`https://wa.me/${waPhone}?text=${encodeURIComponent(t('product.design_with_us'))}`}
+        target="_blank"
+        class="cta-link"
+      >
+        <i class="fa-brands fa-whatsapp"></i>
+        {t('product.design_with_us')}
+      </a>
+    </div>
+  </section>
+
+  <!-- Lightbox for full-size image (simple, same as ref) -->
+  <div id="lightbox" class="sp-lightbox" onclick="this.classList.remove('active')">
+    <span class="sp-lightbox-close">&times;</span>
+    <div class="sp-lightbox-content"><img id="lightbox-img" src="" alt=""></div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script is:inline>
+  // Gallery navigation (exact ref logic)
+  document.querySelectorAll('.side-thumb').forEach((thumb, i) => {
+    thumb.onclick = () => {
+      const stage = document.getElementById('gallery-stage');
+      const target = document.getElementById(`img-${i}`);
+      if (target && stage) {
+        const isMobile = window.innerWidth <= 991;
+        if (isMobile) {
+          stage.scrollTo({ left: target.parentElement.offsetLeft, behavior: 'smooth' });
+        } else {
+          stage.scrollTo({ top: target.parentElement.offsetTop - stage.offsetTop, behavior: 'smooth' });
+        }
+      }
+      document.querySelectorAll('.side-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    };
+  });
+
+  // Sync dots on gallery scroll
+  const stageEl = document.getElementById('gallery-stage');
+  if (stageEl) {
+    stageEl.addEventListener('scroll', () => {
+      const isMobile = window.innerWidth <= 991;
+      const index = isMobile
+        ? Math.round(stageEl.scrollLeft / stageEl.clientWidth)
+        : Math.round(stageEl.scrollTop / stageEl.clientHeight);
+      document.querySelectorAll('.side-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    });
+  }
+
+  // Lightbox on image click
+  document.querySelectorAll('#gallery-stage img').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.onclick = () => {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('active');
+    };
+  });
+
+  // Accordion toggle
+  document.querySelectorAll('.acc-head').forEach(head => {
+    head.onclick = () => {
+      const item = head.parentElement;
+      const isOpen = item.classList.contains('active');
+      document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('active'));
+      if (!isOpen) item.classList.add('active');
+    };
+  });
+</script>
+
+<style>
+  .single-product-page {
+    background: #fff;
+    color: #111;
+    min-height: 100vh;
+  }
+
+  .product-main-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .product-split-layout {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    gap: 60px;
+    align-items: start;
+  }
+
+  /* ─── MEDIA COL ─── */
+  .product-media-col {
+    display: flex;
+    gap: 20px;
+  }
+
+  .media-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70px;
+    flex-shrink: 0;
+  }
+
+  .side-thumb {
+    width: 70px;
+    height: 95px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.45;
+    transition: opacity 0.3s ease;
+    background: #f0f0f0;
+  }
+
+  .side-thumb.active,
+  .side-thumb:hover {
+    opacity: 1;
+  }
+
+  .side-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media-main-content {
+    flex: 1;
+    position: sticky;
+    top: 100px;
+  }
+
+  .main-media-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 85vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .main-media-view::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-image-wrap {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .gallery-image-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .mobile-gallery-pagination {
+    display: none;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ccc;
+    transition: background 0.3s ease;
+  }
+
+  .dot.active {
+    background: #111;
+  }
+
+  /* ─── INFO COL ─── */
+  .product-info-col {
+    position: sticky;
+    top: 100px;
+  }
+
+  .sp-breadcrumbs {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #aaa;
+    margin-bottom: 25px;
+    display: block;
+  }
+
+  .sp-breadcrumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .sp-breadcrumbs a:hover {
+    color: #111;
+  }
+
+  .product-title {
+    font-family: 'Italiana', serif;
+    font-size: 52px;
+    line-height: 1;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #111;
+  }
+
+  .product-sku-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+  }
+
+  .product-short-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 35px;
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+  }
+
+  /* ─── CTA BUTTONS ─── */
+  .product-actions {
+    margin-bottom: 40px;
+  }
+
+  .action-btns-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-secondary-minimal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 18px 20px;
+    background: #111;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+
+  .btn-secondary-minimal:hover {
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    color: #fff !important;
+  }
+
+  .btn-primary-outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    color: #666;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary-outline:hover {
+    border-color: #111;
+    color: #111;
+  }
+
+  /* ─── ATTRIBUTES ─── */
+  .product-attributes-list {
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .attr-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+  }
+
+  .attr-name {
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .attr-value {
+    color: #111;
+    font-weight: 500;
+  }
+
+  /* ─── ACCORDION ─── */
+  .product-accordion {
+    border-top: 1px solid #eee;
+  }
+
+  .acc-item {
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+  }
+
+  .acc-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    user-select: none;
+  }
+
+  .acc-head i {
+    transition: transform 0.3s ease;
+    font-size: 10px;
+  }
+
+  .acc-item.active .acc-head i {
+    transform: rotate(90deg);
+  }
+
+  .acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .acc-item.active .acc-body {
+    max-height: 300px;
+  }
+
+  .acc-body p {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+    padding-bottom: 20px;
+  }
+
+  /* ─── SEO CONTENT ─── */
+    .seo-content-section {
+    background: #f9f9f9;
+    padding: 100px 0;
+    text-align: center;
+  }
+
+  .seo-content-section h2 {
+    font-family: 'Italiana', serif;
+    font-size: 32px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #111;
+    margin-bottom: 35px;
+    text-align: center;
+  }
+
+  .seo-content-section p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.9;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 25px;
+    text-align: center;
+  }
+
+  /* ─── FULL WIDTH VIDEO ─── */
+  .full-width-video {
+    height: 70vh;
+    position: relative;
+    margin: 60px 0;
+    overflow: hidden;
+  }
+
+  .full-width-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ─── RELATED PRODUCTS ─── */
+  .related-products {
+    padding: 80px 0;
+    background: #fff;
+  }
+
+  .related-products h3 {
+    font-family: 'Italiana', serif;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #111;
+    margin-bottom: 40px;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 20px;
+  }
+
+  .related-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .related-card-img {
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    background: #f0f0f0;
+    margin-bottom: 15px;
+  }
+
+  .related-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+  }
+
+  .related-card:hover .related-card-img img {
+    transform: scale(1.04);
+  }
+
+  .related-card-info h4 {
+    font-family: 'Italiana', serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #111;
+    margin-bottom: 4px;
+  }
+
+  .related-card-info p {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* ─── CUSTOM DESIGN CTA ─── */
+  .custom-design-cta {
+    background: #111;
+    padding: 100px 40px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .cta-title {
+    font-family: 'Italiana', serif;
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .cta-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #aaa;
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 45px;
+    border: 1px solid #fff;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+
+  .cta-link:hover {
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    border-color: transparent;
+    color: #fff !important;
+  }
+
+  @keyframes elite-shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @media (max-width: 1024px) {
+    .related-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .related-grid { grid-template-columns: repeat(2, 1fr); }
+    .full-width-video { height: 40vh; margin: 30px 0; }
+    .cta-title { font-size: 28px; }
+    .custom-design-cta { padding: 60px 20px; }
+  }
+  /* ─── LIGHTBOX ─── */
+  .sp-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 20000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+
+  .sp-lightbox.active {
+    display: flex;
+  }
+
+  .sp-lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #fff;
+    font-size: 35px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .sp-lightbox-content img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .product-split-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .product-info-col {
+      position: static;
+    }
+
+    .main-media-view {
+      max-height: none;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: visible;
+      scroll-snap-type: x mandatory;
+    }
+
+    .gallery-image-wrap {
+      min-width: 100%;
+      scroll-snap-align: start;
+    }
+
+    .media-sidebar {
+      display: none;
+    }
+
+    .mobile-gallery-pagination {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-main-container {
+      padding: 20px 15px 60px;
+    }
+
+    .product-title {
+      font-size: 36px;
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+
+import products from '../data/products.json';
+
+// Categories to display in the 12-grid in Priority Order
+const targetCategories = [
+    { id: 'gelinlik', slug: 'veronica', label: t('cat.gelinlik'), nupcial: false, collection: {en: 'Valencia 2026 Collection', es: 'Colección Valencia 2026'} },
+    { id: 'gelinlik', label: t('cat.modest'), nupcial: true, collection: {en: 'Modern Modest Collection', es: 'Colección Nupcial Modesta'} },
+    { id: 'abiye', label: t('cat.nisan'), nupcial: false, collection: {en: 'Engagement Collection', es: 'Colección de Compromiso'} },
+    { id: 'kna-elbisesi', slug: 'scarlet-kinalik', label: t('cat.kina'), nupcial: false, collection: {en: 'Henna Night Collection', es: 'Colección Noche de Henna'} },
+    { id: 'after-party-bride', slug: 'venus', label: t('cat.party'), nupcial: false, collection: {en: 'Party Collection', es: 'Colección de Fiesta'} },
+    { id: 'abiye', slug: 'aslihan-soz-elbisesi', label: t('cat.abiye'), nupcial: false, collection: {en: 'Invitadas Collection', es: 'Colección de Invitadas'} },
+    { id: 'kaftan', slug: 'azahara', label: t('cat.kaftan'), nupcial: false, collection: {en: 'Traditional Collection', es: 'Colección Tradicional'} },
+    { id: 'kaftan', slug: 'kosova', label: t('cat.salvar'), nupcial: false, collection: {en: 'Folkloric Collection', es: 'Colección Folclórica'} },
+    { id: 'buyuk-beden', slug: 'aylin-gelinlik-plus', label: t('cat.plus'), nupcial: false, collection: {en: 'Valencia 2026 Collection', es: 'Colección Valencia 2026'} },
+    { id: 'outlet', label: t('cat.outlet'), nupcial: false, collection: {en: 'Outlet Selection', es: 'Selección Outlet'} },
+    { id: 'soz-elbisesi', label: t('cat.soz'), nupcial: false, collection: {en: 'Valencia 2026 Collection', es: 'Colección Valencia 2026'} },
+    { id: 'gelinlik', slug: 'bianca-gelinlik', label: t('cat.nikah'), nupcial: false, collection: {en: 'Valencia 2026 Collection', es: 'Colección Valencia 2026'} },
+];
+
+const pickedProductIds = new Set();
+
+const items = targetCategories.map(catItem => {
+    let product;
+
+    if (catItem.slug) {
+        product = products.find(p => p.slug.includes(catItem.slug) || p.productName.toLowerCase().includes(catItem.slug));
+    }
+
+    if (!product) {
+       let matches = products.filter(p => {
+            const matchesCat = p.category?.toLowerCase().includes(catItem.id) || p.categories?.some(c => c.toLowerCase().includes(catItem.id));
+            const isNupcial = p.mappedAttributes?.["Tesettür Uyumu"]?.toLowerCase() === "evet";
+            const correctModesty = catItem.nupcial ? isNupcial : !isNupcial;
+            return matchesCat && correctModesty && !pickedProductIds.has(p.id);
+        });
+        
+        // Handle 'skip' to pick different products for After Party / Salvar
+        product = matches[catItem.skip || 0] || matches[0];
+    }
+
+    if (!product) {
+        product = products.find(p => p.category?.toLowerCase().includes(catItem.id));
+    }
+
+    product = product || products[0];
+    pickedProductIds.add(product.id);
+
+    const name = product.title?.[lang] || product.productName || "Product";
+    const firstWord = name.split(' ')[0];
+    
+    let collectionInLang = catItem.collection?.[lang] || catItem.collection?.['en'] || 'Valencia 2026<br>Collection';
+    
+    if (collectionInLang.includes(' Collection') && !collectionInLang.includes('<br>')) {
+        collectionInLang = collectionInLang.replace(' Collection', '<br>Collection');
+    }
+    if (collectionInLang.includes(' Colección') && !collectionInLang.includes('<br>')) {
+        collectionInLang = collectionInLang.replace(' Colección', '<br>Colección');
+    }
+
+    return {
+        href: `/${lang}/product/${product.slug}/`,
+        img: product.image,
+        date: catItem.label,
+        desc: collectionInLang,
+        cat: firstWord
+    };
+});
+---
+<section class="gallery-home" style="margin-top: 50px;">
+    <div class="container">
+        <div class="gallery-home__wrapper">
+            {items.map((item) => (
+                <div class="gallery-home__item margintop-25">
+                    <a href={item.href}>
+                         <img src={item.img} width="388" height="496" alt={item.desc.replace('<br>', ' ')}>
+                         <p class="gallery-home__date">{item.date}</p>
+                         <p class="gallery-home__desc" set:html={item.desc} />
+                         <div class="gallery-home__line"></div>
+                         <div class="gallery-home__cat">{item.cat}</div>
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

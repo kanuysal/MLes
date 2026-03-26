@@ -1,0 +1,45 @@
+.dropbtn {
+    position: relative;
+
+
+    img {
+        vertical-align: middle;
+        margin: -2px 0 0 3px;
+        width: 8px;
+    }
+
+}
+.dropdown-content {
+    display: none;
+    color: $color-3;
+    background-color: $color-1;
+    font-weight: 400;
+    z-index: 99;
+    position: absolute;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+    
+
+        li {
+            margin-left: 0;
+            padding: 10px 30px;
+        }
+    }
+
+    a:hover {
+        color: $color-exergue;
+    }
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+
+  @media only screen and (min-width:200px) and (max-width: 1024px)  {
+    .dropdown-content {
+        right: 50%;
+        transform: translate(50%, 8%);
+    }
+  }

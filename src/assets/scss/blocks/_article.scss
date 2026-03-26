@@ -1,0 +1,270 @@
+.article {
+    padding: 105px 10px;
+
+    &-strong {
+        font-weight: 400;
+        color: $color-1;
+        font-style: italic;
+    }
+
+   
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        column-gap: 45px;
+   
+    }
+ 
+    &-col1 {
+         max-width: 662px;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;  
+
+         ul, ul li {
+            list-style: disc;
+        }
+        ul {
+            padding-left: 10px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        ul li::marker {
+        font-size: 11px;
+        color: $color-gold; 
+        }
+        
+
+         h1 {
+            font-family: $font-serif;
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            margin-top: 15px;
+        }
+   
+        h2 {
+            font-family: $font-serif;
+            font-size: 26px;
+            font-weight: 200;
+            color: $color-gold;
+            margin-bottom: 25px;
+        }
+        h3 {
+            font-family: $font-italic;
+            font-style: italic;
+            font-size: 19px;
+            color: $color-gold;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+        h4 {
+            font-family: $font-serif;
+            color: $color-2;
+            font-size: 16px;
+            font-weight: 200;
+            margin-bottom: 10px;
+        }
+        &-intro {
+            font-family: $font-italic;
+            font-style: italic;
+            font-size: 19px;
+            color: $color-gold;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        &-date {
+            font-family: $font-italic;
+            color: $color-gold;
+            margin-top: 25px;
+            font-style: italic;
+        }
+        &-quote {
+            font-family: $font-italic;
+            color: $color-gold;
+            font-style: italic;
+            margin-bottom: 30px;
+            margin-left: 30px;
+            border-left: 1px solid $color-gold;
+            padding-left: 30px;
+
+        }
+        &-text {
+            color: $color-2;
+            margin-bottom: 30px;
+            text-align: justify;
+            /*padding: 0 10px;*/
+            letter-spacing: .05em;
+
+            &-exergue {
+            @extend .article-col1-text;
+            font-size: 24px;
+            line-height: 120%;
+            font-weight: 400;
+            color: $color-1;
+            }
+        }
+        &-linktoproduct {
+            @extend .article-col1-text;
+            margin-bottom: unset;
+            font-size: 14px;
+            color: $color-2;
+            font-weight: 100;
+            letter-spacing: .1em;
+        }
+        &-bio {
+            color: $color-2;
+            text-align: justify;
+            /*padding: 0 10px;*/
+            letter-spacing: .05em;
+            font-style: italic;
+
+        }
+        &-credits {
+            font-family: $font-sansserif;
+            font-size: 14px;
+            color: $color-2;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 5px 20px 20px;  
+        }
+        &__credits-team {
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: 200;
+            font-style: italic;
+            color: $color-2;
+            text-align: justify;
+
+            p:nth-child(1) {
+                margin-top: 30px;
+            }
+        }
+       
+    }
+  
+    &__list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 30px;
+        row-gap: 30px;
+        align-items: center;
+
+        &-desc {
+            font-size: 17px;
+            line-height: 130%;
+            font-family: $font-serif;
+            padding-right: 50px;
+
+            &--min-height {
+                min-height: 85.78px; /*------------does 85.77-------------*/
+            }
+        }
+    }
+
+    &-col1__dontmiss {
+        margin-top: 30px;
+        padding: 0 10px;
+
+        &-intro {
+            color: $color-exergue;
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        &-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 30px;
+
+            p {
+                font-size: 18px;
+                font-weight: 400;
+                line-height: 120%;
+                padding: 10px 0 20px;
+            }
+        }
+        
+    }
+   
+    &-col2 {
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 35px;
+
+        &-title {
+            font-family: $font-poppins;
+            font-size: 19px;
+            color: $color-gold;
+            font-style: italic;
+        }
+        &-title--bigger {
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin: 5px 0; /*---------OPERA-------*/
+        }
+    }
+    &-col2__viewmore {
+
+        &-items {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            column-gap: 15px;
+            row-gap: 20px;
+            margin: 5px 0; /*----------OPERA----------*/
+        }
+        &-items--fontsmaller {
+            font-size: 17px;
+        }
+    }
+}
+
+@media (max-width: 764px) {
+    .article {
+        padding: 45px 10px;
+        &-col1 {
+            h1 {
+                font-size: 28px;
+            }
+        }
+        &-col1__dontmiss {
+            &-items {
+                grid-template-columns: 1fr;
+            }
+        }
+        &-col1-linktoproduct {
+            padding: 0 10px;
+            font-size: 11px;
+        }
+        &-col2-title:first-child {
+            margin-top: 20px;
+        }
+
+        &__wrapper {
+            flex-direction: column;
+            align-items: center;
+        }
+        &__list {
+            grid-template-columns: 1fr;
+
+            &-desc {
+                padding-right: unset;
+                &--min-height {
+                    min-height: unset;
+                }
+           
+            }
+            
+            div {
+                margin-bottom: 10px;
+            }
+        }
+       
+    }
+}

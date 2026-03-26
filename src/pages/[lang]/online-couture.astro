@@ -1,0 +1,529 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+// KEEP ONLY 3 VERIFIED PRODUCTS (Removed Monica and Adria)
+const products = [
+  { name: 'Grace', img: 'https://minalidya.com/wp-content/uploads/2026/03/grace-1.avif', type: 'Bridal Selection' },
+  { name: 'Diana', img: 'https://minalidya.com/wp-content/uploads/2025/01/8-e099c253-ac8b-4419-bc7d-02fd45dae2d0.avif', type: 'Signature Couture' },
+  { name: 'Maya', img: 'https://minalidya.com/wp-content/uploads/2026/03/maya-3.avif', type: 'Exclusive Design' }
+];
+---
+
+<Layout title={`${t('nav.couture')} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="online-couture-page">
+    
+    <!-- Hero Section with couture.mp4 -->
+    <section class="online-hero">
+      <div class="video-container">
+          <video autoplay muted loop playsinline class="hero-video">
+              <source src="/videos/couture.mp4" type="video/mp4" />
+          </video>
+          <div class="video-overlay"></div>
+      </div>
+      <div class="container hero-content">
+        <span class="hero-label">WORKSHOP DIGITAL</span>
+        <h1 class="hero-title">ESTAMOS SUPERANDO DISTANCIAS</h1>
+        <p class="hero-subtitle">{t('online.digital_taller_subtitle')}</p>
+        <div class="hero-actions">
+            <a href="#steps" class="btn-outline-white">DESCOBRIR EL PROCESO</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Digital Taller Narrative -->
+    <section class="digital-narrative">
+        <div class="container narr-flex">
+            <div class="narr-left">
+                <div class="image-reveal">
+                    {/* Replaced broken Monica with verified Grace */}
+                    <img src={products[0].img} alt="Digital Taller" class="narr-img" />
+                    <div class="reveal-overlay"></div>
+                </div>
+            </div>
+            <div class="narr-right">
+                <span class="tag-line">FUTURO DE LA MODA</span>
+                <h2 class="section-title">{t('online.digital_taller_title')}</h2>
+                <div class="narr-accent"></div>
+                <p class="narr-text-p">{t('online.digital_taller_desc')}</p>
+                <p class="narr-text-p">{t('online.digital_taller_p2')}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three Steps Process -->
+    <section class="process-steps" id="steps">
+        <div class="container">
+            <div class="steps-header">
+                <h2 class="serif-title">Tu Sueño a Medida, Paso a Paso</h2>
+                <p class="steps-intro">La intimidad del taller, ahora en tu pantalla.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <div class="step-icon"><i class="fa-solid fa-video"></i></div>
+                    <h3>{t('online.consultation_title').toUpperCase()}</h3>
+                    <p>{t('online.consultation_desc')}</p>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <div class="step-icon"><i class="fa-solid fa-ruler-combined"></i></div>
+                    <h3>{t('online.measurement_title').toUpperCase()}</h3>
+                    <p>{t('online.measurement_desc')}</p>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <div class="step-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3>{t('online.creation_title').toUpperCase()}</h3>
+                    <p>{t('online.creation_desc')}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Static Showcase -->
+    <section class="online-portfolio">
+        <div class="container">
+             <div class="portfolio-grid-static">
+                {products.map((p) => (
+                    <div class="portfolio-item-static">
+                        <div class="p-img-wrapper">
+                             <img src={p.img} alt={p.name} />
+                             <div class="item-overlay-static">
+                                <span class="p-category">{p.type}</span>
+                                <h4 class="p-name">{p.name}</h4>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="online-cta">
+        <div class="container cta-container">
+            <div class="cta-box">
+                <span class="cta-tag">TU SUEÑO, NUESTRO ARTE</span>
+                <h2 class="cta-main-title">{t('online.cta_title')}</h2>
+                <p class="cta-desc">Mina Lidya redefine el lujo para la novia moderna. Empieza tu viaje hoy mismo.</p>
+                <a href={`/${lang}/shop`} class="btn-elite-shimmer">{t('online.cta_btn')}</a>
+            </div>
+        </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  @keyframes shimmer-move {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+  }
+  @keyframes videoFade {
+      from { opacity: 0; transform: scale(1.1); }
+      to { opacity: 1; transform: scale(1); }
+  }
+</style>
+
+<style>
+  .online-couture-page {
+    background-color: #fff;
+    color: #111;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* --- Hero --- */
+  .online-hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .video-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+  }
+
+  .hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: videoFade 2s ease-out;
+  }
+
+  .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+  }
+
+  .hero-content {
+      position: relative;
+      z-index: 2;
+  }
+
+  .hero-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      margin-bottom: 25px;
+      display: block;
+      color: #fff;
+      opacity: 0.8;
+  }
+
+  .hero-title {
+      font-family: 'Italiana', serif;
+      font-size: clamp(32px, 6vw, 84px);
+      letter-spacing: clamp(5px, 2vw, 15px);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      margin-right: -15px;
+      color: #fff;
+  }
+
+  .hero-subtitle {
+     font-family: 'Cormorant Garamond', serif;
+     font-size: clamp(18px, 2vw, 24px);
+     font-style: italic;
+     opacity: 0.9;
+     max-width: 800px;
+     margin: 0 auto 40px;
+     color: #fff;
+  }
+
+  .btn-outline-white {
+      display: inline-block;
+      padding: 18px 40px;
+      border: 1px solid #fff;
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+  }
+
+  .btn-outline-white:hover {
+      background: #fff;
+      color: #111;
+  }
+
+  /* --- Narrative --- */
+  .digital-narrative {
+      padding: 150px 0;
+  }
+
+  .narr-flex {
+      display: flex;
+      align-items: center;
+      gap: 100px;
+  }
+
+  .narr-left {
+      flex: 1;
+  }
+
+  .image-reveal {
+      position: relative;
+      padding-top: 130%;
+      overflow: hidden;
+      box-shadow: 40px 40px 0 #F9F4F2;
+  }
+
+  .narr-img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+  }
+
+  .narr-right {
+      flex: 1;
+  }
+
+  .tag-line {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: #922724;
+      display: block;
+      margin-bottom: 20px;
+  }
+
+  .section-title {
+      font-family: 'Italiana', serif;
+      font-size: clamp(38px, 4vw, 56px);
+      margin-bottom: 30px;
+      text-transform: uppercase;
+  }
+
+  .narr-accent {
+      width: 60px;
+      height: 2px;
+      background: #D5A08D;
+      margin-bottom: 40px;
+  }
+
+  .narr-text-p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 25px;
+  }
+
+  /* --- Steps --- */
+  .process-steps {
+      padding: 150px 0;
+      background-color: #fafafa;
+  }
+
+  .steps-header {
+      text-align: center;
+      margin-bottom: 100px;
+  }
+
+  .serif-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-style: italic;
+      margin-bottom: 15px;
+  }
+
+  .steps-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #999;
+      text-transform: uppercase;
+  }
+
+  .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: flex-start;
+      gap: 40px;
+  }
+
+  .step-card {
+      text-align: center;
+      padding: 40px;
+      background: #fff;
+      border: 1px solid #eee;
+      position: relative;
+  }
+
+  .step-num {
+      position: absolute;
+      top: 20px; left: 20px;
+      font-family: 'Italiana', serif;
+      font-size: 40px;
+      color: #D5A08D;
+      opacity: 0.15;
+  }
+
+  .step-icon {
+      font-size: 32px;
+      color: #D5A08D;
+      margin-bottom: 25px;
+  }
+
+  .step-card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      color: #111;
+  }
+
+  .step-card p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #666;
+  }
+
+  .step-line {
+      width: 1px;
+      height: 100px;
+      background: #ddd;
+      align-self: center;
+  }
+
+  /* --- Static Showcase --- */
+  .online-portfolio {
+      padding: 100px 0;
+  }
+
+  .portfolio-grid-static {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+  }
+
+  .portfolio-item-static {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+  }
+
+  .p-img-wrapper {
+      position: relative;
+      width: 100%; height: 100%;
+  }
+
+  .p-img-wrapper img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s ease;
+  }
+
+  .portfolio-item-static:hover .p-img-wrapper img {
+      transform: scale(1.1);
+  }
+
+  .item-overlay-static {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 30px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+  }
+
+  .portfolio-item-static:hover .item-overlay-static {
+      opacity: 1;
+  }
+
+  .p-category {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.8);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+  }
+
+  .p-name {
+      color: #fff;
+      font-family: 'Italiana', serif;
+      font-size: 24px;
+      text-transform: uppercase;
+  }
+
+  /* --- CTA --- */
+  .online-cta {
+      padding: 150px 0;
+      background: #fdfdfd;
+      text-align: center;
+  }
+
+  .cta-box {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px;
+      border: 1px solid #f0f0f0;
+  }
+
+  .cta-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: #922724;
+      display: block;
+      margin-bottom: 25px;
+  }
+
+  .cta-main-title {
+      font-family: 'Italiana', serif;
+      font-size: 52px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+  }
+
+  .cta-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 50px;
+  }
+
+  /* --- ELITE BUTTON --- */
+  .btn-elite-shimmer {
+    display: inline-flex;
+    padding: 20px 50px;
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    color: #fff !important;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    border-radius: 0;
+  }
+
+  .btn-elite-shimmer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  @keyframes elite-shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+  }
+
+  @media (max-width: 991px) {
+    .narr-flex { flex-direction: column; gap: 50px; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-line { width: 40px; height: 1px; margin: 0 auto; }
+    .cta-box { padding: 40px; }
+    .portfolio-grid-static { grid-template-columns: 1fr; }
+  }
+</style>

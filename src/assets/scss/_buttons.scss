@@ -1,0 +1,45 @@
+.btn-moreinfo {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 30px;
+}
+.btn-download {
+    @extend .btn-moreinfo;
+    margin-top: 5px;
+    color: $color-exergue;
+    transition: color 0.5s ease-in-out;
+
+    &:hover {
+        color: $color-4;
+    }
+}
+.moving-line {
+    width: 15px;
+    height: 1px;
+    background-color: $color-2;
+    margin-top: 30px;
+}
+.moving-line.effect {
+    animation: movehorizontal 3s linear infinite;
+   
+}
+
+@keyframes movehorizontal {
+    0% {
+        transform: translate(0);
+    }
+    50% {
+        transform: translate(15px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-download {
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,7 @@
+
+> products.json:19677:    "uniqueStub": "22134-ahu-prenses-model-gelinlik",
+  products.json:19678:    "status": "publish",
+  products.json:19679:    "sku": "ML26S077",
+  products.json:19680:    "price": "40000",
+  products.json:19681:    "productName": "Ahu Gelinlik",
+

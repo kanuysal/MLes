@@ -1,0 +1,636 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+// VERIFIED PRODUCTS FROM products.json
+const products = [
+  { name: 'Zeliha', img: 'https://minalidya.com/wp-content/uploads/2025/01/zeliha-2-1-scaled.avif', type: 'Modest Couture' },
+  { name: 'Clara', img: 'https://minalidya.com/wp-content/uploads/2026/03/clara-2.avif', type: 'Bridal Selection' },
+  { name: 'Chloe', img: 'https://minalidya.com/wp-content/uploads/2024/12/chloe-2-2-scaled.avif', type: 'Alta Costura' },
+  { name: 'Veronica', img: 'https://minalidya.com/wp-content/uploads/2026/02/Veronica-2-6-scaled.avif', type: 'Signature Design' },
+  { name: 'Venus', img: 'https://minalidya.com/wp-content/uploads/2026/02/venus-1-scaled.avif', type: 'Exclusive Party' }
+];
+---
+
+<Layout title={`${t('nav.alta_costura')} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="alta-costura-page">
+    
+    <!-- Hero Section -->
+    <section class="alta-hero">
+      <video autoplay muted loop playsinline class="hero-video-bg">
+        <source src="/videos/alta.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <span class="hero-label-top">EXCLUSIVIDAD Y ELEGANCIA</span>
+        <h1 class="hero-main-title">{t('nav.alta_costura').toUpperCase()}</h1>
+        <p class="hero-intro-text">{t('alta.intro')}</p>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Narrative Section 1 -->
+    <section class="narrative-one">
+        <div class="container narr-grid">
+            <div class="narr-text">
+                <div class="text-reveal-wrapper">
+                    <span class="narr-tag">Nuestro Legado</span>
+                    <h2 class="narr-title">Evolución de un Sueño</h2>
+                    <div class="line-accent"></div>
+                    <p class="narr-p">{t('alta.p2')}</p>
+                    <div class="narr-quote">
+                        "Cada vestido es una obra de arte, diseñada para perdurar en el tiempo."
+                    </div>
+                </div>
+            </div>
+            <div class="narr-media">
+                <div class="media-frame">
+                    <img src={products[0].img} alt="Alta Costura Design" class="parallax-img" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hiyab Specialization Section -->
+    <section class="hiyab-special">
+        <div class="container">
+            <div class="hiyab-header">
+                <h2 class="section-title-serif">Diseños Únicos con Hiyab</h2>
+                <div class="subtitle-line"></div>
+            </div>
+            <div class="hiyab-grid">
+                <div class="hiyab-content">
+                    <p class="hiyab-desc">{t('alta.p1')}</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <span class="dot"></span>
+                            <span>Telas de alta gama importadas</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="dot"></span>
+                            <span>Bordados a mano personalizados</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="dot"></span>
+                            <span>Ajuste perfecto garantizado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hiyab-gallery">
+                    <div class="gallery-item-wrapper main-item">
+                        <img src={products[1].img} alt="Hiyab Design 1" />
+                    </div>
+                    <div class="gallery-item-wrapper sub-item">
+                        <img src={products[0].img} alt="Hiyab Design 2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cinematic Parallax Quote -->
+    <section class="cinematic-quote">
+        <div class="parallax-wrap">
+            <div class="parallax-bg" style={`background-image: url(${products[4].img});`}></div>
+            <div class="q-overlay"></div>
+            <div class="q-content">
+                <blockquote class="cinematic-text">
+                    "Lo hacemos con pasión y lo vistan con amor."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signature Collection Grid -->
+    <section class="signature-grid">
+        <div class="container">
+            <div class="grid-header">
+                <span class="grid-tag">LOOKBOOK 2026</span>
+                <h2 class="grid-title">Piezas de Colección</h2>
+            </div>
+            <div class="product-showcase">
+                {products.map((p, idx) => (
+                    <div class={`product-card-elite ${idx % 2 !== 0 ? 'offset-y' : ''}`}>
+                        <div class="p-img-box">
+                            <img src={p.img} alt={p.name} />
+                            <div class="p-overlay-details">
+                                <span class="p-cat">{p.type}</span>
+                                <h3 class="p-name">{p.name}</h3>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="alta-cta">
+        <div class="container cta-flex">
+            <div class="cta-left">
+                <h2 class="cta-title">¿Sueñas con el vestido perfecto?</h2>
+                <p>Nuestros diseñadores están listos para dar vida a tu visión.</p>
+            </div>
+            <div class="cta-right">
+                <a href={`/${lang}/shop`} class="btn-elite-shimmer">AGENDAR CONSULTA</a>
+            </div>
+        </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  @keyframes lineGrow {
+      from { width: 0; }
+      to { width: 80px; }
+  }
+  @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(50px); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+</style>
+
+<style>
+  .alta-costura-page {
+    background-color: #fff;
+    color: #111;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* --- Hero --- */
+  .alta-hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .hero-video-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+      z-index: 2;
+  }
+
+  .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+  }
+
+  .hero-label-top {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 6px;
+      margin-bottom: 30px;
+      display: block;
+      animation: heroFadeIn 1s ease forwards;
+  }
+
+  .hero-main-title {
+      font-family: 'Italiana', serif;
+      font-size: clamp(40px, 8vw, 120px);
+      letter-spacing: clamp(10px, 3vw, 35px);
+      margin-bottom: 30px;
+      animation: heroFadeIn 1.3s ease forwards;
+      margin-right: -35px;
+  }
+
+  .hero-intro-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-style: italic;
+      opacity: 0.9;
+      animation: heroFadeIn 1.6s ease forwards;
+      max-width: 700px;
+      margin: 0 auto;
+  }
+
+  .scroll-indicator {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.7;
+  }
+
+  .mouse {
+      width: 2px;
+      height: 40px;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+  }
+
+  .mouse::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 50%;
+      background: #D5A08D;
+      animation: wheel 2s infinite;
+  }
+
+  @keyframes wheel {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(200%); }
+  }
+
+  /* --- Narrative --- */
+  .narrative-one {
+      padding: 150px 0;
+  }
+
+  .narr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+  }
+
+  .narr-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: #922724;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: block;
+  }
+
+  .narr-title {
+      font-family: 'Italiana', serif;
+      font-size: 52px;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+  }
+
+  .line-accent {
+      width: 80px;
+      height: 2px;
+      background: #D5A08D;
+      margin-bottom: 40px;
+  }
+
+  .narr-p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 40px;
+  }
+
+  .narr-quote {
+      font-family: 'Italianno', cursive;
+      font-size: 42px;
+      color: #922724;
+      line-height: 1.2;
+  }
+
+  .media-frame {
+      position: relative;
+      padding: 30px;
+      border: 1px solid #f0f0f0;
+  }
+
+  .media-frame img {
+      width: 100%;
+      height: 700px;
+      object-fit: cover;
+      box-shadow: 30px 30px 0 #F9F4F2;
+  }
+
+  /* --- Hiyab Section --- */
+  .hiyab-special {
+      padding: 150px 0;
+      background-color: #FDFBFA;
+  }
+
+  .section-title-serif {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 15px;
+  }
+
+  .subtitle-line {
+      width: 50px;
+      height: 2px;
+      background: #922724;
+      margin: 0 auto 80px;
+  }
+
+  .hiyab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: center;
+  }
+
+  .hiyab-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 40px;
+  }
+
+  .feature-list {
+      display: grid;
+      gap: 20px;
+  }
+
+  .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #111;
+  }
+
+  .dot {
+      width: 8px;
+      height: 8px;
+      background: #D5A08D;
+  }
+
+  .hiyab-gallery {
+      position: relative;
+      height: 600px;
+  }
+
+  .gallery-item-wrapper {
+      position: absolute;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+  }
+
+  .main-item {
+      width: 70%;
+      height: 80%;
+      top: 0; right: 0;
+      z-index: 2;
+  }
+
+  .sub-item {
+      width: 50%;
+      height: 60%;
+      bottom: 0; left: 0;
+      z-index: 1;
+      border: 15px solid #fff;
+  }
+
+  .gallery-item-wrapper img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+  }
+
+  /* --- Cinematic Quote --- */
+  .cinematic-quote {
+      height: 70vh;
+      overflow: hidden;
+      position: relative;
+  }
+
+  .parallax-wrap {
+      width: 100%; height: 100%;
+      position: relative;
+  }
+
+  .parallax-bg {
+      position: absolute;
+      inset: -50px;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+  }
+
+  .q-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2;
+  }
+
+  .q-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 40px;
+  }
+
+  .cinematic-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 64px);
+      font-style: italic;
+      color: #fff;
+      max-width: 1000px;
+  }
+
+  /* --- Signature Grid --- */
+  .signature-grid {
+      padding: 150px 0;
+  }
+
+  .grid-header {
+      text-align: center;
+      margin-bottom: 100px;
+  }
+
+  .grid-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: #999;
+      display: block;
+      margin-bottom: 15px;
+  }
+
+  .grid-title {
+      font-family: 'Italiana', serif;
+      font-size: 48px;
+      text-transform: uppercase;
+  }
+
+  .product-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+  }
+
+  .product-card-elite {
+      position: relative;
+      transition: all 0.6s ease;
+  }
+
+  .offset-y {
+      margin-top: 80px;
+  }
+
+  .p-img-box {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+  }
+
+  .p-img-box img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.5s ease;
+  }
+
+  .product-card-elite:hover .p-img-box img {
+      transform: scale(1.1);
+  }
+
+  .p-overlay-details {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      padding: 40px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: #fff;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.5s ease;
+  }
+
+  .product-card-elite:hover .p-overlay-details {
+      transform: translateY(0);
+      opacity: 1;
+  }
+
+  .p-cat {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 10px;
+  }
+
+  .p-name {
+      font-family: 'Italiana', serif;
+      font-size: 24px;
+      text-transform: uppercase;
+  }
+
+  /* --- Final CTA --- */
+  .alta-cta {
+      padding: 100px 0;
+      background: #111;
+      color: #fff;
+  }
+
+  .cta-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+  }
+
+  .cta-title {
+      font-family: 'Italiana', serif;
+      font-size: 38px;
+      margin-bottom: 15px;
+  }
+
+  .cta-left p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      opacity: 0.7;
+  }
+
+  /* --- ELITE BUTTON --- */
+  .btn-elite-shimmer {
+    display: inline-flex;
+    padding: 20px 50px;
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    color: #fff !important;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    border-radius: 0;
+  }
+
+  .btn-elite-shimmer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  @keyframes elite-shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+  }
+
+  @media (max-width: 991px) {
+    .narr-grid, .hiyab-grid, .cta-flex {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .line-accent { margin: 0 auto 40px; }
+    .offset-y { margin-top: 0; }
+    .cta-flex { flex-direction: column; }
+    .hero-main-title { font-size: 50px; letter-spacing: 10px; }
+  }
+</style>

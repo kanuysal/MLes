@@ -1,0 +1,46 @@
+.designersdirectory {
+    text-align: center;
+    /*background-color: #f6f6f6;*/
+    padding: 120px 20px 120px;
+
+
+    h1 {
+        font-size: 28px;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: $color-1;
+        padding-bottom: 37px;
+    }
+
+    &-exergue {
+        font-weight: 200;
+        text-transform: capitalize;
+        letter-spacing: 3px;
+        line-height: 180%;
+        color: $color-1;
+        cursor: pointer;
+
+        a:hover {
+            color: $color-exergue;
+        }
+    }
+    strong {
+        @extend .designersdirectory-exergue;
+        font-weight: 400;
+        font-style: italic;
+    }
+}
+
+@media (max-width: 764px) {
+    .designersdirectory {
+        &-exergue {
+            font-size: 18px;
+        }
+
+    }
+}
+
+
+
+

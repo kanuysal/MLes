@@ -1,0 +1,30 @@
+.pagenotfound {
+    padding: 0 10px;
+
+    &__wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+    }
+
+    &__text {
+        font-size: 52px;
+        text-transform: uppercase;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 764px) {
+    .pagenotfound {
+
+        &__wrapper {
+            height: auto;
+        }
+
+        &__text {
+            font-size: 32px;
+        }
+    }
+}

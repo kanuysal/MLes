@@ -1,0 +1,239 @@
+---
+const { lang = 'es' } = Astro.props;
+
+// Images from d:\minadesign\elements\minalidyaes\hero-slider
+// We use the 5 images provided. To match the source loop, we repeat them or append the first.
+// The source seem to use a specific number of images. 
+// If it's a 20s animation on 5 slots (20% each), we need at least 5 images.
+const sliderData = {
+    en: [
+        { img: '/img/slider/novia.jpeg', text: 'Valencia Collection \A Bridal 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Tradition & Luxury \A Caftan Atelier' },
+        { img: '/img/slider/compromiso.jpeg', text: 'Elegance & Style \A Commitment Dresses' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Shine Brighter' },
+        { img: '/img/slider/tienda.jpeg', text: 'Visit Our Boutique \A Alta Costura' },
+    ],
+    es: [
+        { img: '/img/slider/novia.jpeg', text: 'Colección Valencia \A Novias 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Tradición y Lujo \A Atelier de Caftán' },
+        { img: '/img/slider/compromiso.jpeg', text: 'Elegancia y Estilo \A Vestidos de Fiesta' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Brilla con Nosotros' },
+        { img: '/img/slider/tienda.jpeg', text: 'Visita Nuestra Boutique \A Alta Costura' },
+    ],
+    tr: [
+        { img: '/img/slider/novia.jpeg', text: 'Valencia Koleksiyonu \A Gelinlik 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Gelenek ve Lüks \A Kaftan Atölyesi' },
+        { img: '/img/slider/compromiso.jpeg', text: 'Zarafet ve Stil \A Nişan Elbiseleri' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Daha Parlak Işılda' },
+        { img: '/img/slider/tienda.jpeg', text: 'Butiğimizi Ziyaret Edin \A Alta Costura' },
+    ],
+    fr: [
+        { img: '/img/slider/novia.jpeg', text: 'Collection Valencia \A Mariée 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Tradition et Luxe \A Atelier Caftan' },
+        { img: '/img/slider/compromiso.jpeg', text: 'Élégance et Style \A Robes de Fiançailles' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Brillez plus fort' },
+        { img: '/img/slider/tienda.jpeg', text: 'Visitez notre boutique \A Alta Costura' },
+    ],
+    de: [
+        { img: '/img/slider/novia.jpeg', text: 'Valencia Kollektion \A Brautmode 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Tradition & Luxus \A Kaftan Atelier' },
+        { img: '/img/slider/compromiso.jpeg', text: 'Eleganz & Stil \A Verlobungskleider' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Glänzen Sie heller' },
+        { img: '/img/slider/tienda.jpeg', text: 'Besuchen Sie uns \A Alta Costura' },
+    ],
+    it: [
+        { img: '/img/slider/novia.jpeg', text: 'Collezione Valencia \A Sposa 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Tradizione e Lusso \A Atelier Caftano' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Brillate di più' },
+        { img: '/img/slider/tienda.jpeg', text: 'Visita la nostra boutique \A Alta Costura' },
+    ],
+    nl: [
+        { img: '/img/slider/novia.jpeg', text: 'Valencia Collectie \A Bruidsmode 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Traditie & Luxe \A Kaftan Atelier' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Straal nog meer' },
+        { img: '/img/slider/tienda.jpeg', text: 'Bezoek onze boutique \A Alta Costura' },
+    ],
+    ru: [
+        { img: '/img/slider/novia.jpeg', text: 'Коллекция Valencia \A Невеста 2026' },
+        { img: '/img/slider/caftan.jpeg', text: 'Традиции и Роскошь \A Ателье Кафтанов' },
+        { img: '/img/slider/party.jpeg', text: 'After Party \A Сияй ярче' },
+        { img: '/img/slider/tienda.jpeg', text: 'Посетите наш бутик \A Alta Costura' },
+    ]
+};
+
+const baseSlides = sliderData[lang] || sliderData['en'];
+const slides = [...baseSlides, baseSlides[0]]; // Repeat first for loop
+---
+
+<style is:global>
+    /* Exact CSS from Source style.css */
+    .hslider {
+        margin-top: 0;
+        margin-bottom: 50px;
+    }
+    .hslider__wrapper {
+        height: 600px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .hslider__item {
+        height: 100%;
+        width: 500%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        position: relative;
+    }
+    .hslider__item::after, .hslider__slide::after {
+        content: none !important;
+    }
+    
+    .hslider__captions-fixed {
+        position: absolute;
+        bottom: 100px;
+        left: 50px;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .hslider__caption-item {
+        position: absolute; /* Stacked at same spot */
+        top: 0;
+        left: 0;
+        min-width: 600px;
+    }
+
+    .hslider__caption-item span {
+        display: block;
+        white-space: pre;
+        color: #fff;
+        font-family: "Italiana", serif;
+        font-size: 52px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        
+        /* Reveal Animation */
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(10px);
+        animation: reveal 20s infinite ease-in-out;
+    }
+
+    /* Staggering the reveal for each slide by syncing with the global slide animation (5 slides, 20s total) */
+    .hslider__caption-item:nth-child(1) span { animation-delay: 0s; }
+    .hslider__caption-item:nth-child(2) span { animation-delay: -16s; } /* Reversing delay correctly for fixed overlay order */
+    .hslider__caption-item:nth-child(3) span { animation-delay: -12s; }
+    .hslider__caption-item:nth-child(4) span { animation-delay: -8s; }
+    .hslider__caption-item:nth-child(5) span { animation-delay: -4s; }
+
+    @keyframes reveal {
+        0%, 15% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        18%, 100% { opacity: 0; transform: translateY(-20px); filter: blur(5px); }
+    }
+    .hslider__item-img-static {
+        position: relative;
+        flex: 0 0 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .hslider__slide {
+        position: relative;
+        flex: 0 0 20%;
+        max-width: 20%;
+        -webkit-animation: slide 20s infinite ease-in-out;
+        animation: slide 20s infinite ease-in-out;
+        overflow: hidden;
+    }
+    
+    .hslider .hslider__item:hover .hslider__slide {
+        -webkit-animation-play-state: paused;
+        animation-play-state: paused;
+    }
+
+    @-webkit-keyframes slide {
+        0% { left: 0; }
+        20% { left: -20%; }
+        40% { left: -40%; }
+        60% { left: -60%; }
+        80% { left: -80%; }
+        100% { left: -100%; }
+    }
+    @keyframes slide {
+        0% { left: 0; }
+        20% { left: -20%; }
+        40% { left: -40%; }
+        60% { left: -60%; }
+        80% { left: -80%; }
+        100% { left: -100%; }
+    }
+
+    .hslider-mobile {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .hslider {
+            display: none;
+        }
+        .hslider-mobile {
+            display: block;
+        }
+        .hslider-mobile__wrapper {
+            height: 400px;
+            overflow: hidden;
+        }
+        .hslider-mobile__item {
+            width: 100%;
+            height: 100%;
+        }
+        .hslider-mobile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    
+    /* Ensure line-deco is visible */
+    .line-deco {
+        height: 1px !important;
+        background-color: #000 !important;
+        opacity: 0.3;
+    }
+    .header {
+        margin-bottom: 0 !important;
+    }
+</style>
+
+<div class="hslider">
+    <div class="container">
+        <div class="hslider__wrapper">
+            <div class="hslider__item">
+                {slides.map((slide) => (
+                   <div class="hslider__slide">
+                        <img width="1230" height="600" src={slide.img} alt="Mina Lidya Hero" class="hslider__item-img-static" />
+                   </div>
+                ))}
+            </div>
+            {/* Fixed Caption Overlay (Static in place) */}
+            <div class="hslider__captions-fixed">
+                {slides.slice(0, 5).map((slide, idx) => (
+                    <div class="hslider__caption-item">
+                        <span>{slide.text}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hslider-mobile">
+    <div class="container">
+        <div class="hslider-mobile__wrapper">
+            <div class="hslider-mobile__item">
+                <img width="600" height="800" src="/img/slider/novia.jpeg" alt="Mina Lidya Mobile" />
+            </div>
+        </div>
+    </div>
+</div>

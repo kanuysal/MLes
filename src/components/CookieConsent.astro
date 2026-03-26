@@ -1,0 +1,195 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div id="cookie-banner" class="cookie-banner hidden">
+    <div class="cookie-content">
+        <div class="cookie-header">
+            <span class="elite-tag">{t('cookie.title')}</span>
+            <button id="close-cookie" class="close-cookie">&times;</button>
+        </div>
+        <p class="cookie-text">
+            {t('cookie.message')}
+        </p>
+        <div class="cookie-actions">
+            <a href={`/${lang}/privacy-policy/`} class="cookie-link">{t('cookie.policy')}</a>
+            <div class="cookie-btns">
+                <button id="decline-cookies" class="btn-decline">{t('cookie.decline')}</button>
+                <button id="accept-cookies" class="btn-accept">{t('cookie.accept')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cookie-banner {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 400px;
+        max-width: calc(100vw - 60px);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid #000;
+        z-index: 9999;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 30px;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .cookie-banner.visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .cookie-banner.hidden {
+        display: none;
+    }
+
+    .cookie-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .elite-tag {
+        font-family: 'Inter', sans-serif;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #000;
+    }
+
+    .close-cookie {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        color: #999;
+        transition: color 0.3s;
+    }
+
+    .close-cookie:hover {
+        color: #000;
+    }
+
+    .cookie-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .cookie-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .cookie-link {
+        font-size: 11px;
+        color: #999;
+        text-decoration: underline;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        transition: color 0.3s;
+    }
+
+    .cookie-link:hover {
+        color: #000;
+    }
+
+    .cookie-btns {
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn-accept, .btn-decline {
+        font-family: 'Inter', sans-serif;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.15em;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+    }
+
+    .btn-accept {
+        background: #000;
+        color: #fff;
+        border: 1px solid #000;
+    }
+
+    .btn-accept:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .btn-decline {
+        background: transparent;
+        color: #999;
+        border: 1px solid transparent;
+    }
+
+    .btn-decline:hover {
+        color: #000;
+    }
+
+    @media (max-width: 640px) {
+        .cookie-banner {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            border: none;
+            border-top: 1px solid #000;
+            padding: 25px;
+        }
+    }
+</style>
+
+<script is:inline>
+    function initCookieBanner() {
+        const banner = document.getElementById('cookie-banner');
+        if (!banner) return;
+
+        const isAccepted = localStorage.getItem('mina_cookie_consent');
+        
+        if (!isAccepted) {
+            banner.classList.remove('hidden');
+            setTimeout(() => {
+                banner.classList.add('visible');
+            }, 1000);
+        }
+
+        document.getElementById('accept-cookies')?.addEventListener('click', () => {
+            localStorage.setItem('mina_cookie_consent', 'accepted');
+            banner.classList.remove('visible');
+            setTimeout(() => banner.classList.add('hidden'), 600);
+        });
+
+        document.getElementById('decline-cookies')?.addEventListener('click', () => {
+            localStorage.setItem('mina_cookie_consent', 'declined');
+            banner.classList.remove('visible');
+            setTimeout(() => banner.classList.add('hidden'), 600);
+        });
+
+        document.getElementById('close-cookie')?.addEventListener('click', () => {
+            banner.classList.remove('visible');
+            setTimeout(() => banner.classList.add('hidden'), 600);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCookieBanner);
+</script>

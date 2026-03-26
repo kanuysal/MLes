@@ -1,0 +1,430 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+const magazines = [
+  { title: "Bridal Collection", pdf: "/magazines/bridal.pdf", cover: "/magazines/bridal.jpg" },
+  { title: "Engagement / Night", pdf: "/magazines/night.pdf", cover: "/magazines/night.jpg" },
+  { title: "Modest Fashion", pdf: "/magazines/modest.pdf", cover: "/magazines/modest.jpg" },
+  { title: "After Party", pdf: "/magazines/after-party.pdf", cover: "/magazines/after-party.jpg" },
+  { title: "Bridal Makeup", pdf: "/magazines/makeup.pdf", cover: "/magazines/makeup.png" }
+];
+---
+
+<Layout title={`${t('nav.boutique')} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="magazine-page">
+    
+    <!-- Hero Section -->
+    <section class="magazine-hero">
+      <div class="container hero-container">
+        <span class="hero-label">EDITORIAL</span>
+        <h1 class="hero-title">{t('nav.boutique')}</h1>
+        <p class="hero-subtitle">Discover our latest collections in 3D experience</p>
+        <div class="hero-line"></div>
+      </div>
+    </section>
+
+    <!-- Magazine Gallery Section -->
+    <section class="magazine-section">
+        <div class="container">
+            <div class="magazine-grid">
+                {magazines.map((mag) => (
+                    <div class="magazine-item anim-up">
+                        <div class="magazine-frame" onclick={`window.eliteReader.open('${mag.pdf}')`}>
+                            <img src={mag.cover} alt={mag.title} />
+                            <div class="magazine-overlay">
+                                <span>OPEN LOOKBOOK</span>
+                            </div>
+                        </div>
+                        <div class="magazine-meta">
+                            <h3>{mag.title.toUpperCase()}</h3>
+                            <button class="btn-read" onclick={`window.eliteReader.open('${mag.pdf}')`}>EXPLORE</button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Quote -->
+    <section class="editorial-quote">
+        <div class="container">
+            <div class="quote-box">
+                <span class="script-tag">Stylish</span>
+                <p class="quote-text">"La elegancia no es destacar, sino ser recordado."</p>
+                <div class="quote-author">Mina Lidya Atelier</div>
+            </div>
+        </div>
+    </section>
+
+  </main>
+
+  <!-- Scripts for 3D Magazine Engine -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+  
+  <script is:inline>
+    // PDF.js Worker Init
+    if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    }
+
+    class EliteMagazine {
+        constructor() {
+            this.overlay = null;
+            this.pageFlip = null;
+            this.cache = new Map();
+            this.viewport = null;
+            this.loader = null;
+            this.toolbar = null;
+            this.init();
+        }
+
+        init() {
+            this.createReaderUI();
+        }
+
+        createReaderUI() {
+            // Remove existing modal if any to ensure fresh start
+            const existing = document.getElementById('magazine-modal');
+            if (existing) existing.remove();
+
+            const modal = document.createElement('div');
+            modal.className = 'elite-reader-modal';
+            modal.id = 'magazine-modal';
+            modal.innerHTML = `
+                <div class="reader-close-btn">&times;</div>
+                <div class="reader-loader">PREPARING COLLECTION...</div>
+                <div class="reader-viewport">
+                    <div id="flipbook-root" class="fb-book"></div>
+                </div>
+                <div class="magazine-toolbar">
+                    <button class="toolbar-btn" id="fb-prev">PREV</button>
+                    <span class="toolbar-text" id="fb-page-num" style="color:#fff; font-size: 0.8rem; letter-spacing: 0.2em;">1 / 1</span>
+                    <button class="toolbar-btn" id="fb-next">NEXT</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            this.overlay = modal;
+            this.loader = modal.querySelector('.reader-loader');
+            this.viewport = modal.querySelector('#flipbook-root');
+            this.toolbar = modal.querySelector('.magazine-toolbar');
+
+            modal.querySelector('.reader-close-btn').onclick = () => this.close();
+            document.getElementById('fb-prev').onclick = () => this.pageFlip?.flipPrev();
+            document.getElementById('fb-next').onclick = () => this.pageFlip?.flipNext();
+        }
+
+        async open(pdfPath) {
+            // CRITICAL: Re-create UI for every open to avoid DOM state issues
+            if (!this.overlay || !document.body.contains(this.overlay)) {
+                this.createReaderUI();
+            }
+
+            this.overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (this.toolbar) this.toolbar.style.opacity = '0';
+
+            // Kill existing engine instance
+            if (this.pageFlip) {
+                try {
+                    this.pageFlip.destroy();
+                } catch(e) {}
+                this.pageFlip = null;
+            }
+            if (this.viewport) this.viewport.innerHTML = '';
+
+            // Cache Logic
+            if (this.cache.has(pdfPath)) {
+                this.loader.style.display = 'none';
+                if (this.toolbar) this.toolbar.style.opacity = '1';
+                this.injectPages(this.cache.get(pdfPath));
+                setTimeout(() => this.initFlip(), 150);
+                return;
+            }
+
+            this.loader.style.display = 'block';
+            this.loader.innerText = "PREPARING COLLECTION...";
+
+            try {
+                const loadingTask = pdfjsLib.getDocument(pdfPath);
+                const pdf = await loadingTask.promise;
+                const maxPages = Math.min(pdf.numPages, 48); // Extended for full catalogs
+                const pageDataUrls = [];
+
+                for (let i = 1; i <= maxPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 2.0 });
+                    const canvas = document.createElement('canvas');
+                    // MANDATORY: willReadFrequently for performance as per logs
+                    const context = canvas.getContext('2d', { willReadFrequently: true });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    await page.render({ canvasContext: context, viewport }).promise;
+                    pageDataUrls.push(canvas.toDataURL('image/webp', 0.85));
+                }
+
+                this.cache.set(pdfPath, pageDataUrls);
+                this.loader.style.display = 'none';
+                if (this.toolbar) this.toolbar.style.opacity = '1';
+                this.injectPages(pageDataUrls);
+                setTimeout(() => this.initFlip(), 200);
+
+            } catch (e) {
+                console.error("Reader Error", e);
+                this.loader.innerText = "Error loading looks.";
+                setTimeout(() => this.close(), 2000);
+            }
+        }
+
+        injectPages(urls) {
+            if (!this.viewport) return;
+            this.viewport.innerHTML = '';
+            const frag = document.createDocumentFragment();
+            urls.forEach((url, i) => {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'page';
+                pageDiv.setAttribute('data-density', (i === 0 || i === urls.length - 1) ? 'hard' : 'soft');
+                pageDiv.innerHTML = `
+                    <div class="page-content" style="background: #fff; width: 100%; height: 100%; position: relative;">
+                        <img src="${url}" alt="Page ${i + 1}" style="width:100%; height:100%; object-fit: contain;">
+                        <div class="page-shine"></div>
+                    </div>
+                `;
+                frag.appendChild(pageDiv);
+            });
+            this.viewport.appendChild(frag);
+        }
+
+        initFlip() {
+            if (!this.viewport) return;
+            const pages = this.viewport.querySelectorAll('.page');
+            if (pages.length === 0) return;
+
+            const isMobile = window.innerWidth < 1024;
+            const screenH = window.innerHeight;
+            const screenW = window.innerWidth;
+
+            let h = screenH * 0.8;
+            let w = h * 0.707;
+
+            if (!isMobile) {
+                if ((w * 2) > (screenW * 0.95)) {
+                    w = (screenW * 0.95) / 2;
+                    h = w * 1.414;
+                }
+            } else {
+                if (w > screenW * 0.9) {
+                    w = screenW * 0.9;
+                    h = w * 1.414;
+                }
+            }
+
+            const PageFlipClass =
+                (window.St && window.St.PageFlip) ? window.St.PageFlip :
+                (window.PageFlip && window.PageFlip.PageFlip) ? window.PageFlip.PageFlip :
+                (typeof PageFlip !== 'undefined') ? PageFlip :
+                (window.PageFlip) ? window.PageFlip : null;
+
+            if (!PageFlipClass) return;
+
+            this.pageFlip = new PageFlipClass(this.viewport, {
+                width: Math.floor(w),
+                height: Math.floor(h),
+                size: "fixed",
+                showCover: true,
+                usePortrait: isMobile,
+                autoSize: true,
+                mode: isMobile ? 'portrait' : 'landscape',
+                showDoublePage: !isMobile,
+                startZIndex: 1000
+            });
+
+            try {
+                this.pageFlip.loadFromHTML(pages);
+                const counter = document.getElementById('fb-page-num');
+                if (counter) {
+                    const total = this.pageFlip.getPageCount();
+                    counter.innerText = `1 / ${total}`;
+                    this.pageFlip.on('flip', (e) => {
+                        counter.innerText = `${e.data + 1} / ${total}`;
+                    });
+                }
+            } catch(e) { console.error("Flip Logic Fail", e); }
+        }
+
+        close() {
+            if (!this.overlay) return;
+            this.overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Hard Reset to prevent duplicate listeners or engine hangs
+            setTimeout(() => {
+                if (this.pageFlip) {
+                   try { this.pageFlip.destroy(); } catch(e) {}
+                   this.pageFlip = null;
+                }
+                if (this.overlay && this.overlay.parentNode) {
+                    this.overlay.parentNode.removeChild(this.overlay);
+                }
+                this.overlay = null;
+                this.viewport = null;
+                this.loader = null;
+            }, 300);
+        }
+    }
+
+    // Single Instance
+    window.eliteReader = new EliteMagazine();
+  </script>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* Elite Reader Modal CSS */
+  .elite-reader-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(20px);
+  }
+  .elite-reader-modal.active {
+      opacity: 1;
+      visibility: visible;
+  }
+  .reader-close-btn {
+      position: absolute;
+      top: 30px; right: 40px;
+      color: #fff; font-size: 40px;
+      cursor: pointer;
+      z-index: 100;
+  }
+  .reader-viewport {
+      width: 90vw; height: 80vh;
+      display: flex; align-items: center; justify-content: center;
+  }
+  .fb-book { box-shadow: 0 50px 150px rgba(0,0,0,0.6); }
+  
+  .page { display: none; background: #fff; }
+  .page-shine {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%, rgba(0,0,0,0.08) 100%);
+      pointer-events: none;
+  }
+
+  .magazine-toolbar {
+      position: absolute; bottom: 40px;
+      display: flex; align-items: center; gap: 20px;
+      padding: 10px 30px; background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(15px);
+      border-radius: 40px; border: 1px solid rgba(255,255,255,0.15);
+      transition: opacity 0.3s ease;
+  }
+  .toolbar-btn {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); 
+      color: #fff;
+      padding: 8px 16px; border-radius: 20px;
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      letter-spacing: 2px; cursor: pointer;
+      transition: all 0.3s ease;
+  }
+  .toolbar-btn:hover { background: rgba(213, 174, 54, 0.3); }
+  .reader-loader { color: #fff; font-family: 'Italiana', serif; letter-spacing: 4px; animation: elite-pulse 2s infinite; }
+
+  @keyframes elite-pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+  }
+</style>
+
+<style>
+  .magazine-page { background: #fff; color: #111; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
+
+  /* Hero */
+  .magazine-hero {
+      padding: 200px 0 100px; text-align: center; background: #F9F9F9;
+  }
+  .hero-label { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 6px; color: #922724; display: block; margin-bottom: 20px; }
+  .hero-title { font-family: 'Italiana', serif; font-size: 64px; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 4px; }
+  .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-style: italic; color: #666; }
+  .hero-line { width: 60px; height: 2px; background: #D5A08D; margin: 40px auto 0; }
+
+  /* Grid */
+  .magazine-section { padding: 100px 0; }
+  .magazine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+  }
+  .magazine-item { text-align: center; }
+  .magazine-frame {
+      position: relative;
+      aspect-ratio: 1/1.414;
+      overflow: hidden;
+      background: #eee;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      transition: transform 0.4s ease;
+  }
+  .magazine-frame:hover { transform: translateY(-10px); }
+  .magazine-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .magazine-overlay {
+      position: absolute; inset: 0;
+      background: rgba(146, 39, 36, 0.8);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.4s ease;
+  }
+  .magazine-frame:hover .magazine-overlay { opacity: 1; }
+  .magazine-overlay span { color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px; font-weight: 600; }
+
+  .magazine-meta { padding: 25px 0; }
+  .magazine-meta h3 { font-family: 'Italiana', serif; font-size: 18px; margin-bottom: 15px; }
+  .btn-read {
+      background: none; border: 1px solid #111; padding: 10px 25px;
+      font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 2px;
+      cursor: pointer; transition: all 0.3s ease;
+  }
+  .btn-read:hover { background: #111; color: #fff; }
+
+  /* Quote */
+  .editorial-quote { padding: 150px 0; background: #fff; text-align: center; }
+  .quote-box { max-width: 800px; margin: 0 auto; }
+  .script-tag { font-family: 'Italianno', cursive; font-size: 32px; color: #D5A08D; display: block; margin-bottom: 20px; }
+  .quote-text { font-family: 'Italiana', serif; font-size: 38px; line-height: 1.4; margin-bottom: 30px; }
+  .quote-author { font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 4px; color: #999; text-transform: uppercase; }
+
+  @media (max-width: 768px) {
+      .hero-title { font-size: 42px; }
+      .magazine-grid { grid-template-columns: 1fr; }
+  }
+</style>

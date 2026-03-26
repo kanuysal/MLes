@@ -1,0 +1,15 @@
+    .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Pour un défilement plus fluide sur iOS */
+    font-size: 13px;
+
+    th {
+        padding: 2px;
+        text-align: left;
+    }
+
+    td {
+        padding: 2px;
+        text-align: left;
+    }
+     }

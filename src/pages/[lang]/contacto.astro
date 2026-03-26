@@ -1,0 +1,441 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+---
+
+<Layout title={`${t('contact.title')} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="contact-page">
+    
+    <!-- Hero Section -->
+    <section class="contact-hero">
+      <div class="container hero-container">
+        <span class="hero-tag">Mina Lidya Haute Couture</span>
+        <h1 class="hero-title">{t('contact.title')}</h1>
+        <p class="hero-intro">{t('contact.intro')}</p>
+        <div class="hero-line"></div>
+      </div>
+    </section>
+
+    <!-- Global Hubs Grid -->
+    <section class="contact-grid">
+      <div class="container">
+        <div class="locations-wrapper">
+          
+          <!-- Design Office Spain -->
+          <div class="location-card">
+            <div class="card-header">
+                <span class="country-tag">{t('contact.spain').toUpperCase()}</span>
+                <h2 class="card-title">{t('contact.office_title')}</h2>
+            </div>
+            <div class="card-content">
+              <p class="address">C/ Santa Rosa, 38 7i<br/>03802 Alcoy (Alicante)<br/>Comunidad Valenciana, España</p>
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="label">{t('contact.phone')}:</span>
+                  <a href="tel:+34632623300" class="value">+34 632 623 300</a>
+                </div>
+                <div class="info-item">
+                  <span class="label">{t('contact.web')}:</span>
+                  <a href="https://minalidya.es" target="_blank" class="value">minalidya.es</a>
+                </div>
+                <div class="info-item">
+                  <span class="label">{t('contact.email')}:</span>
+                  <a href="mailto:novias@minalidya.es" class="value">novias@minalidya.es</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Production Turkey -->
+          <div class="location-card">
+            <div class="card-header">
+                <span class="country-tag">{t('contact.turkey').toUpperCase()}</span>
+                <h2 class="card-title">{t('contact.workshop_title')}</h2>
+            </div>
+            <div class="card-content">
+              <p class="address">Yenice Mahallesi Kasim Efendi Cd. No.25<br/>16400 Inegol (Bursa)<br/>Turquía</p>
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="label">{t('contact.phone')}:</span>
+                  <a href="tel:+905421131641" class="value">+90 542 113 16 41</a>
+                </div>
+                <div class="info-item">
+                  <span class="label">{t('contact.web')}:</span>
+                  <a href="https://minalidya.com" target="_blank" class="value">minalidya.com</a>
+                </div>
+                <div class="info-item">
+                  <span class="label">{t('contact.email')}:</span>
+                  <a href="mailto:store@minalidya.com" class="value">store@minalidya.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Physical Stores & Global Presence -->
+    <section class="stores-section">
+        <div class="container store-flex">
+            
+            <div class="store-block">
+                <h3 class="block-title">{t('contact.store_title')}</h3>
+                <div class="store-grid-mini">
+                    <div class="store-info-box">
+                        <span class="store-label">{t('contact.spain_store')}</span>
+                        <p class="coming-soon">{t('contact.coming_soon')}</p>
+                    </div>
+                    <div class="store-info-box">
+                        <span class="store-label">{t('contact.turkey_store')}</span>
+                        <p class="address-mini">Yenice Mahallesi Kasim Efendi Cd. No.25 16400 Inegol (Bursa)</p>
+                        <a href="tel:+905421131641" class="tel-mini">+90 542 113 16 41</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="global-block">
+                <h3 class="block-title">Global Presence</h3>
+                <div class="global-info-content">
+                    <p class="global-tagline">WE DESIGN WORLDWIDE</p>
+                    <div class="global-links">
+                        <div class="g-link">
+                            <span class="label-mini">{t('contact.global')}:</span>
+                            <a href="https://minalidya.wedding" target="_blank">minalidya.wedding</a>
+                        </div>
+                        <div class="g-link">
+                            <span class="label-mini">Global Email:</span>
+                            <a href="mailto:bride@minalidya.wedding">bride@minalidya.wedding</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="contact-cta">
+        <div class="container text-center">
+            <h2 class="cta-title">¿Tienes alguna pregunta?</h2>
+            <p class="cta-subtitle">Nuestro equipo de atención al cliente está a tu disposición para ayudarte.</p>
+            <a href={`/${lang}/shop`} class="btn-elite-shimmer">HABLAR CON UN ASESOR</a>
+        </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .contact-page {
+    background-color: #fff;
+    color: #111;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .text-center { text-align: center; }
+
+  /* --- Hero --- */
+  .contact-hero {
+    padding: 180px 0 100px;
+    text-align: center;
+    background-color: #FDFBFA;
+  }
+
+  .hero-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: #922724;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 25px;
+  }
+
+  .hero-title {
+    font-family: 'Italiana', serif;
+    font-size: clamp(40px, 6vw, 72px);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+
+  .hero-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    line-height: 1.5;
+  }
+
+  .hero-line {
+      width: 60px;
+      height: 2px;
+      background: #D5A08D;
+      margin: 0 auto;
+  }
+
+  /* --- Grid --- */
+  .contact-grid {
+      padding: 120px 0;
+  }
+
+  .locations-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+  }
+
+  .location-card {
+      padding: 60px;
+      background: #fff;
+      border: 1px solid #eee;
+      transition: box-shadow 0.4s ease;
+  }
+
+  .location-card:hover {
+      box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+  }
+
+  .country-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #D5A08D;
+      display: block;
+      margin-bottom: 15px;
+  }
+
+  .card-title {
+      font-family: 'Italiana', serif;
+      font-size: 32px;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+  }
+
+  .address {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 40px;
+  }
+
+  .info-list {
+      display: grid;
+      gap: 15px;
+  }
+
+  .info-item {
+      display: flex;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+  }
+
+  .info-item .label {
+      color: #999;
+      text-transform: uppercase;
+  }
+
+  .info-item .value {
+      color: #111;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+  }
+
+  .info-item .value:hover {
+      color: #922724;
+  }
+
+  /* --- Stores Section --- */
+  .stores-section {
+      padding: 100px 0;
+      background-color: #F9F4F2;
+  }
+
+  .store-flex {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 100px;
+  }
+
+  .block-title {
+      font-family: 'Italiana', serif;
+      font-size: 28px;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #EACEB4;
+      padding-bottom: 15px;
+  }
+
+  .store-grid-mini {
+      display: grid;
+      gap: 30px;
+  }
+
+  .store-info-box {
+      padding-bottom: 20px;
+  }
+
+  .store-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #922724;
+      display: block;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+  }
+
+  .coming-soon {
+      font-family: 'Italianno', cursive;
+      font-size: 32px;
+      color: #888;
+  }
+
+  .address-mini {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 8px;
+  }
+
+  .tel-mini {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+  }
+
+  .global-info-content {
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #EACEB4;
+  }
+
+  .global-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #111;
+  }
+
+  .global-links {
+      display: grid;
+      gap: 20px;
+  }
+
+  .g-link {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+  }
+
+  .g-link .label-mini {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #999;
+  }
+
+  .g-link a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: #922724;
+      text-decoration: none;
+      font-weight: 500;
+  }
+
+  /* --- CTA --- */
+  .contact-cta {
+      padding: 150px 0;
+  }
+
+  .cta-title {
+      font-family: 'Italiana', serif;
+      font-size: 42px;
+      margin-bottom: 15px;
+  }
+
+  .cta-subtitle {
+     font-family: 'Cormorant Garamond', serif;
+     font-size: 22px;
+     font-style: italic;
+     color: #666;
+     margin-bottom: 50px;
+  }
+
+  /* --- ELITE BUTTON --- */
+  .btn-elite-shimmer {
+    display: inline-flex;
+    padding: 20px 50px;
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    color: #fff !important;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    border-radius: 0;
+  }
+
+  .btn-elite-shimmer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  @keyframes elite-shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+  }
+
+  @media (max-width: 991px) {
+      .locations-wrapper, .store-flex {
+          grid-template-columns: 1fr;
+      }
+      .location-card {
+          padding: 30px;
+      }
+      .store-flex {
+          gap: 50px;
+      }
+  }
+</style>

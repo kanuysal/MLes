@@ -1,0 +1,643 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+// Specific Models requested by the user - VERIFIED URLS
+const models = [
+  { name: 'Veronica', img: 'https://minalidya.com/wp-content/uploads/2026/02/Veronica-2-6-scaled.avif', desc: 'A-Kesim Zarafeti' },
+  { name: 'Eleonora', img: 'https://minalidya.com/wp-content/uploads/2025/09/paris-gelinlik-3-scaled.avif', desc: 'Paris Işıltısı' },
+  { name: 'Duru', img: 'https://minalidya.com/wp-content/uploads/2026/02/celine-5-scaled.avif', desc: 'Modern Romantizm' },
+  { name: 'Venus', img: 'https://minalidya.com/wp-content/uploads/2026/02/venus-1-scaled.avif', desc: 'After Party Ikonu' },
+  { name: 'Bianca', img: 'https://minalidya.com/wp-content/uploads/2026/02/bp-scaled.avif', desc: 'Yenilikçi Şıklık' }
+];
+
+---
+
+<Layout title={`${t('nav.atellier')} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="atelier-page">
+    
+    <!-- Hero Section with Background Video -->
+    <section class="atelier-hero">
+      <div class="hero-video-bg">
+          <video autoplay muted loop playsinline class="video-bg">
+              <source src="/videos/atelier.mp4" type="video/mp4" />
+          </video>
+          <div class="video-overlay"></div>
+      </div>
+      <div class="container hero-container">
+        <div class="hero-text-content">
+            <span class="hero-top-tag">{t('header.logo_sub')}</span>
+            <h1 class="hero-title">{t('nav.atellier').toUpperCase()}</h1>
+            <div class="hero-separator">
+                <div class="line"></div>
+                <span class="script">{t('atelier.subtitle')}</span>
+                <div class="line"></div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editorial Intro Section -->
+    <section class="editorial-intro">
+      <div class="container grid-container">
+        <div class="editorial-content">
+          <div class="text-frame">
+            <h2 class="editorial-title">{t('atelier.title')}</h2>
+            <div class="editorial-line"></div>
+            <p class="editorial-p main-p">
+              {t('atelier.p1')}
+            </p>
+            <p class="editorial-p">
+              {t('atelier.p2')}
+            </p>
+            <p class="editorial-p">
+              {t('atelier.p3')}
+            </p>
+          </div>
+        </div>
+        <div class="editorial-side-media">
+            <div class="image-stack">
+                <img src={models[0].img} alt="Veronica" class="stack-img main-img" />
+                <img src={models[3].img} alt="Venus" class="stack-img sub-img" />
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Philosophy (New Block) -->
+    <section class="philosophy-block">
+        <div class="container philosophy-container">
+            <div class="philosophy-media">
+                <video autoplay muted loop playsinline class="cinematic-video">
+                    <source src="/videos/atelier.mp4" type="video/mp4" />
+                </video>
+            </div>
+            <div class="philosophy-text">
+                <span class="section-label">Hauter Couture Excellence</span>
+                <h2 class="section-title">Nuestra Filosofía</h2>
+                <p>{t('atelier.p4')}</p>
+                <p>{t('atelier.p5')}</p>
+                <div class="signature">
+                    <span class="signature-text">Mina Lidya Design Team</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Gallery -->
+    <section class="models-showcase">
+        <div class="container showcase-container">
+            <div class="showcase-header">
+                <h2 class="showcase-title">Signature Selections</h2>
+                <p class="showcase-subtitle">Modelos exclusivos diseñados para momentos inolvidables</p>
+            </div>
+            <div class="showcase-grid">
+                {models.map((model, idx) => (
+                    <div class={`model-card ${idx % 2 !== 0 ? 'shifted' : ''}`}>
+                        <div class="model-img-wrapper">
+                            <img src={model.img} alt={model.name} />
+                            <div class="img-overlay"></div>
+                        </div>
+                        <div class="model-info">
+                            <h3 class="model-name">{model.name}</h3>
+                            <span class="model-desc">{model.desc}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us - Refined -->
+    <section class="why-us-elite">
+      <div class="container">
+        <div class="why-header">
+           <h2 class="why-title-serif">{t('atelier.why_title')}</h2>
+           <p class="why-subtitle-elite">{t('atelier.why_desc')}</p>
+        </div>
+
+        <div class="why-grid-elite">
+           <div class="why-item">
+              <span class="why-num">01</span>
+              <h3>Diseño Exclusivo</h3>
+              <p>Creamos piezas únicas que capturan la esencia de cada novia, fusionando arte y tejidos de la más alta calidad.</p>
+           </div>
+           <div class="why-item">
+              <span class="why-num">02</span>
+              <h3>Maestría Artesanal</h3>
+              <p>Cada puntada es realizada por expertos sastres en nuestro taller, garantizando acabados de alta costura impecables.</p>
+           </div>
+           <div class="why-item">
+              <span class="why-num">03</span>
+              <h3>Experiencia Valencia</h3>
+              <p>Nuestra presencia en España nos permite integrar las tendencias más vanguardistas de la moda europea en cada diseño.</p>
+           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="atelier-cta">
+        <div class="cta-bg" style={`background-image: url(${models[4].img});`}></div>
+        <div class="cta-content">
+            <h2 class="cta-title">Vive la Experiencia Mina Lidya</h2>
+            <p>Agenda una cita personalizada y encuentra el vestido de tus sueños.</p>
+            <a href={`/${lang}/shop`} class="btn-elite-shimmer">{lang === 'es' ? 'VER COLECCIÓN' : 'VIEW COLLECTION'}</a>
+        </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  @keyframes elite-shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+  }
+  @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<style>
+  .atelier-page {
+    background-color: #fff;
+    color: #111;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* --- Hero --- */
+  .atelier-hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fdfdfd;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-video-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .video-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+  }
+
+  .hero-top-tag {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: #fff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    animation: fadeUp 1s ease forwards;
+    opacity: 0.8;
+  }
+
+  .hero-container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-family: 'Italiana', serif;
+    font-size: clamp(40px, 8vw, 100px);
+    letter-spacing: clamp(10px, 3vw, 25px);
+    margin-bottom: 20px;
+    color: #fff;
+    font-weight: 300;
+    animation: fadeUp 1.2s ease forwards;
+    margin-right: -25px; 
+  }
+
+  .hero-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    animation: fadeUp 1.4s ease forwards;
+  }
+
+  .hero-separator .line {
+    height: 1px;
+    width: 60px;
+    background: rgba(255,255,255,0.4);
+  }
+
+  .hero-separator .script {
+    font-family: 'Italianno', cursive;
+    font-size: clamp(30px, 5vw, 52px);
+    color: #D5A08D;
+    line-height: 0.8;
+  }
+
+  /* --- Editorial Intro --- */
+  .editorial-intro {
+    padding: 100px 0;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+  }
+
+  .text-frame {
+     padding: 60px;
+     border: 1px solid #f0f0f0;
+     position: relative;
+     background: #fff;
+     z-index: 2;
+  }
+
+  .editorial-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-style: italic;
+    margin-bottom: 30px;
+    color: #111;
+  }
+
+  .editorial-line {
+      width: 50px;
+      height: 2px;
+      background: #922724;
+      margin-bottom: 35px;
+  }
+
+  .editorial-p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 25px;
+  }
+
+  .main-p {
+      font-size: 24px;
+      color: #111;
+      font-weight: 500;
+  }
+
+  .image-stack {
+      position: relative;
+      height: 700px;
+  }
+
+  .stack-img {
+      position: absolute;
+      object-fit: cover;
+      box-shadow: 20px 20px 60px rgba(0,0,0,0.1);
+  }
+
+  .main-img {
+      width: 80%;
+      height: 80%;
+      top: 0;
+      right: 0;
+      z-index: 1;
+  }
+
+  .sub-img {
+      width: 60%;
+      height: 60%;
+      bottom: 0;
+      left: 0;
+      z-index: 2;
+      border: 10px solid #fff;
+  }
+
+  /* --- Philosophy Block --- */
+  .philosophy-block {
+      padding: 150px 0;
+      background-color: #F9F4F2; 
+  }
+
+  .philosophy-container {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: center;
+  }
+
+  .cinematic-video {
+      width: 100%;
+      height: 600px;
+      object-fit: cover;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+  }
+
+  .philosophy-text {
+      padding-right: 50px;
+  }
+
+  .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: #922724;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: block;
+  }
+
+  .section-title {
+      font-family: 'Italiana', serif;
+      font-size: 64px;
+      margin-bottom: 35px;
+      text-transform: uppercase;
+  }
+
+  .philosophy-text p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 30px;
+  }
+
+  .signature {
+      margin-top: 50px;
+  }
+
+  .signature-text {
+      font-family: 'Italianno', cursive;
+      font-size: 48px;
+      color: #922724;
+  }
+
+  /* --- Models Showcase --- */
+  .models-showcase {
+      padding: 150px 0;
+  }
+
+  .showcase-header {
+      text-align: center;
+      margin-bottom: 100px;
+  }
+
+  .showcase-title {
+      font-family: 'Italiana', serif;
+      font-size: 52px;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      margin-bottom: 20px;
+  }
+
+  .showcase-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: #888;
+  }
+
+  .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 60px;
+  }
+
+  .model-card {
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .model-card.shifted {
+      margin-top: 100px;
+  }
+
+  .model-img-wrapper {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+  }
+
+  .model-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s ease;
+  }
+
+  .model-card:hover .model-img-wrapper img {
+      transform: scale(1.08);
+  }
+
+  .img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+      opacity: 0;
+      transition: opacity 0.6s ease;
+  }
+
+  .model-card:hover .img-overlay {
+      opacity: 1;
+  }
+
+  .model-info {
+      padding: 25px 0;
+      text-align: left;
+  }
+
+  .model-name {
+      font-family: 'Italiana', serif;
+      font-size: 28px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+  }
+
+  .model-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #999;
+      text-transform: uppercase;
+  }
+
+  /* --- Why Us Elite --- */
+  .why-us-elite {
+      padding: 120px 0;
+      background: #fff;
+      border-top: 1px solid #f0f0f0;
+  }
+
+  .why-title-serif {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 20px;
+  }
+
+  .why-subtitle-elite {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #999;
+      margin-bottom: 80px;
+      text-transform: uppercase;
+  }
+
+  .why-grid-elite {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+  }
+
+  .why-item {
+      position: relative;
+      padding-top: 40px;
+  }
+
+  .why-num {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-family: 'Italiana', serif;
+      font-size: 60px;
+      color: #922724;
+      opacity: 0.1;
+  }
+
+  .why-item h3 {
+      font-family: 'Italiana', serif;
+      font-size: 24px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+  }
+
+  .why-item p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #666;
+  }
+
+  /* --- CTA Section --- */
+  .atelier-cta {
+      position: relative;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      overflow: hidden;
+  }
+
+  .cta-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center 20%;
+      filter: brightness(0.6);
+      z-index: 1;
+      transition: transform 10s linear;
+  }
+
+  .atelier-cta:hover .cta-bg {
+      transform: scale(1.1);
+  }
+
+  .cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 40px;
+  }
+
+  .cta-title {
+      font-family: 'Italiana', serif;
+      font-size: clamp(32px, 5vw, 64px);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+  }
+
+  .cta-content p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-style: italic;
+      margin-bottom: 40px;
+  }
+
+  /* --- ELITE BUTTON --- */
+  .btn-elite-shimmer {
+    display: inline-flex;
+    padding: 20px 50px;
+    background: linear-gradient(90deg, #D5A08D, #c0c0c0, #EACEB4, #c0c0c0, #D5A08D);
+    background-size: 200% auto;
+    animation: elite-shimmer 3s linear infinite;
+    color: #fff !important;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    border-radius: 0;
+  }
+
+  .btn-elite-shimmer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  @media (max-width: 991px) {
+    .grid-container, .philosophy-container {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+    .text-frame { padding: 30px; }
+    .editorial-title { font-size: 38px; }
+    .image-stack { height: 500px; }
+    .why-grid-elite { grid-template-columns: 1fr; }
+    .shifted { margin-top: 0; }
+    .section-title { font-size: 42px; }
+  }
+</style>

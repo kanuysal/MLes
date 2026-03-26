@@ -1,0 +1,29 @@
+.kc-title {
+        font-size: 60px !important;
+}
+.kc-title--fortin {
+    font-size: 56px !important;
+}
+.link {
+    max-width: 662px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+
+    a {
+        color: $color-exergue;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 0.5px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .kc-title {
+        font-size: 42px !important;
+
+    }
+}

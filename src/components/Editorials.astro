@@ -1,0 +1,64 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+
+const labels = {
+    es: { title: 'Deseamos lo mejor para nuestras novias', cta: 'Descubrir' },
+    en: { title: 'Discover the creators of luxury wedding dresses', cta: 'Discover' },
+    tr: { title: 'Lüks gelinlik tasarımcılarımızı keşfedin', cta: 'Keşfet' },
+    fr: { title: 'Découvrez les créateurs de robes de luxe', cta: 'Découvrir' },
+    de: { title: 'Entdecken Sie die Schöpfer von Luxuskleidern', cta: 'Entdecken' },
+    it: { title: 'Scopri i creatori di abiti da sposa di lusso', cta: 'Scoprire' },
+    nl: { title: 'Ontdek de makers van luxe trouwjurken', cta: 'Ontdekken' },
+    ru: { title: 'Откройте для себя дизайнеров роскошных платьев', cta: 'Узнать больше' }
+};
+
+const currentLabels = labels[lang] || labels.en;
+---
+
+<section class="editorials" style="background-color: #f6f6f6; padding: 80px 0;">
+    <div class="container">
+        <div class="editorials__wrapper">
+            <div class="editorials__intro" style="text-align: center; margin-bottom: 50px;">
+                <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #4D4D4D; font-family: 'Inter', sans-serif;">{currentLabels.title}</p>
+            </div>
+            <div class="editorials__items" style="display: flex; gap: 40px; justify-content: center;">
+                <!-- Ahu - Classic -->
+                <div class="editorials__item" style="flex: 1; text-align: center;">
+                    <p style="font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; color: #4D4D4D; margin-bottom: 10px;">Bridal 2026 - Ahu</p>
+                    <p style="font-size: 32px; font-weight: 200; letter-spacing: 1px; color: #6a5921; margin-bottom: 20px; font-family: 'Cinzel', serif;">Ahu - {lang === 'tr' ? 'Klasik' : 'Classic'}</p>
+                    <a href={`/${lang}/product/ahu-prenses-model-gelinlik/`}>
+                        <img src="https://minalidya.com/wp-content/uploads/2024/12/ahu-4-1-scaled.avif" width="600" height="400" alt="Ahu Classic Wedding Dress" style="width: 100%; max-height: 450px; object-fit: cover; filter: grayscale(100%); transition: all 0.6s ease; cursor: pointer;">
+                    </a>
+                    <div class="editorials__items-cta" style="margin-top: 20px;">
+                        <a href={`/${lang}/product/ahu-prenses-model-gelinlik/`} style="color: #000; text-decoration: none; border-bottom: 1px solid #6a5921; padding-bottom: 5px; font-family: 'Italiana', serif; font-size: 16px;">{currentLabels.cta}</a>
+                    </div>
+                </div>
+
+                <!-- Gonca - Modest -->
+                <div class="editorials__item" style="flex: 1; text-align: center;">
+                    <p style="font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; color: #4D4D4D; margin-bottom: 10px;">Bridal 2026 - Gonca</p>
+                    <p style="font-size: 32px; font-weight: 200; letter-spacing: 1px; color: #6a5921; margin-bottom: 20px; font-family: 'Cinzel', serif;">Gonca - {lang === 'tr' ? 'Tesettür' : 'Modest'}</p>
+                    <a href={`/${lang}/product/gonca-gelinlik/`}>
+                        <img src="https://minalidya.com/wp-content/uploads/2025/09/gonca-7-scaled.avif" width="600" height="400" alt="Gonca Modest Wedding Dress" style="width: 100%; max-height: 450px; object-fit: cover; filter: grayscale(100%); transition: all 0.6s ease; cursor: pointer;">
+                    </a>
+                    <div class="editorials__items-cta" style="margin-top: 20px;">
+                        <a href={`/${lang}/product/gonca-gelinlik/`} style="color: #000; text-decoration: none; border-bottom: 1px solid #6a5921; padding-bottom: 5px; font-family: 'Italiana', serif; font-size: 16px;">{currentLabels.cta}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .editorials__item img:hover {
+        filter: grayscale(0%) !important;
+    }
+    @media (max-width: 768px) {
+        .editorials__items {
+            flex-direction: column;
+        }
+    }
+</style>

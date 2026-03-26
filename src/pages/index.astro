@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import CategoryList from '../components/CategoryList.astro';
+import HeroSlider from '../components/HeroSlider.astro';
+import Footer from '../components/Footer.astro';
+import Grid from '../components/Grid.astro';
+import Inspoboard from '../components/Inspoboard.astro';
+import GalleryHome from '../components/GalleryHome.astro';
+import Editorials from '../components/Editorials.astro';
+
+const lang = 'es';
+---
+
+<script is:inline>
+    // Localized Redirection Logic
+    const userLang = navigator.language || navigator.userLanguage;
+    const langCode = userLang.slice(0, 2).toLowerCase();
+    
+    // Check if we are at root "/"
+    if (window.location.pathname === '/' || window.location.pathname === '') {
+        if (langCode === 'tr') {
+            window.location.replace('/tr/');
+        } else if (langCode === 'es') {
+            window.location.replace('/es/');
+        } else {
+            // Default to EN for others
+            window.location.replace('/en/');
+        }
+    }
+</script>
+
+<Layout title="Mina Lidya - Atelier, Alta Costura & Online Couture" description="Descubre la elegancia nupcial de Mina Lidya..." lang={lang}>
+    <Header />
+    <main>
+        <HeroSlider lang={lang} />
+        <CategoryList lang={lang} />
+        <Grid lang={lang} />
+        <Inspoboard lang={lang} />
+        <GalleryHome lang={lang} />
+        <Editorials lang={lang} />
+    </main>
+    <Footer lang={lang} />
+</Layout>

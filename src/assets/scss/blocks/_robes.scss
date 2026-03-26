@@ -1,0 +1,120 @@
+.robes {
+    margin: 0 0 100px;
+
+    .robes__filter-item.active {
+        color: $color-exergue; /* color for the active filter */
+      }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 35px 126px;
+        line-height: 1.8;
+      
+
+
+        > * + * {
+            margin-left: 25px;
+        }
+    }
+    &__filter-item {
+        font-size: 14px;
+        color: $color-2;
+        font-weight: 100;
+        letter-spacing: .1em;
+        transition: color 0.5s ease-in-out;
+
+        &:hover {
+            color: $color-exergue;
+            cursor: pointer;
+        }
+    }
+  
+    &__items {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+   
+
+       img {
+            height: 520px;
+            width: 390px;
+        }
+
+    }
+    h1 {
+        text-align: center;
+        font-family: $font-serif;
+        font-size: 42px;
+        line-height: 1.2;
+        text-transform: uppercase;
+        margin: 35px 0 20px;
+    }
+    h2 {
+        font-size: 15px;
+        color: #6a5921;
+        margin: 10px 0;
+        font-style: italic;
+        text-align: left;
+    }
+    &__items-price {
+        font-family: $font-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 10px 0;
+    }
+    &__items-desc {
+        font-family: $font-serif;
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin: 5px 0 0;
+        text-transform: uppercase;
+        color: #6a5921;
+        min-height: 40px;
+    }
+    &-line {
+        @extend .gallery-home__line;
+        margin-top: unset;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .robes {
+            h1 {
+                font-size: 28px;
+            }
+            &__items {
+                grid-template-columns: 1fr;
+
+                img {
+                    height: unset;
+                    width: unset;
+                    height: auto;
+                    width: 100%;
+                }
+            }
+            &__filter-item {
+                padding: 7px 0;
+            }
+            &__filter {
+                line-height: unset;
+                margin: 35px 0;
+                > * + * {
+                    margin-left: unset;
+                }
+                div {
+                    padding: 10px 15px;
+                }
+            }
+        }
+    }

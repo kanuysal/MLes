@@ -1,0 +1,41 @@
+.top {
+    background-color: $color-1;
+    color: $color-3;
+    font-family: $font-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    position: fixed;
+    bottom: 320px;      /* distance from bottom */
+    right: 20px;       /* distance from right */
+    width: 220px;       /* circle width */
+    height: 120px;      /* circle height */
+    display: flex;      /* to center content */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    padding: 0;        /* remove padding */
+    margin: 0;         /* remove margin */
+}
+
+@media (max-width: 768px) {
+    .top {
+    background-color: #000;
+    color: #fff;
+    font-size: 18px;
+    font-style: italic;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: unset;
+    width: unset;
+    height: unset;
+    z-index: 10
+}
+
+}

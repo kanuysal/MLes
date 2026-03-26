@@ -1,0 +1,16 @@
+.gallery-1col {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 65px;
+    
+
+    img {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 764px) {
+    .gallery-1col {
+        padding: 0 10px;
+    }
+}

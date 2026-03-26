@@ -1,0 +1,146 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+const content = {
+    es: {
+        title: "Política de Privacidad",
+        p1: "En Mina Lidya, accesible desde minalidya.es, la privacidad de nuestros visitantes es una de nuestras principales prioridades. Este documento de política de privacidad contiene los tipos de información recopilada y registrada por Mina Lidya y cómo la utilizamos.",
+        p2: "Si tiene preguntas adicionales o necesita más información sobre nuestra política de privacidad, no dude en contactarnos.",
+        p3: "Consentimiento",
+        p4: "Al utilizar nuestro sitio web, usted acepta nuestra política de privacidad y sus términos.",
+        p5: "Información que recopilamos",
+        p6: "La información personal que se le solicita proporcionar, y las razones por las que se le solicita, se le indicarán claramente en el momento en que le solicitemos proporcionar su información personal.",
+        p7: "Cómo utilizamos su información",
+        p8: "Utilizamos la información recopilada para operar y mantener nuestro sitio web, mejorar y personalizar su experiencia, comprender cómo utiliza nuestro sitio, desarrollar nuevos productos/servicios y comunicarnos con usted directamente o a través de nuestros socios.",
+        contact: "Contacto: novias@minalidya.es"
+    },
+    en: {
+        title: "Privacy Policy",
+        p1: "At Mina Lidya, accessible from minalidya.es, the privacy of our visitors is one of our main priorities. This privacy policy document contains types of information that is collected and recorded by Mina Lidya and how we use it.",
+        p2: "If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.",
+        p3: "Consent",
+        p4: "By using our website, you hereby consent to our Privacy Policy and agree to its terms.",
+        p5: "Information we collect",
+        p6: "The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.",
+        p7: "How we use your information",
+        p8: "We use the information we collect in various ways, including to provide, operate, and maintain our website; improve, personalize, and expand our website; understand and analyze how you use our website; and develop new products, services, features, and functionality.",
+        contact: "Contact: novias@minalidya.es"
+    },
+    tr: {
+        title: "Gizlilik Politikası",
+        p1: "minalidya.es adresinden erişilebilen Mina Lidya'da, ziyaretçilerimizin gizliliği ana önceliklerimizden biridir. Bu gizlilik politikası belgesi, Mina Lidya tarafından toplanan ve kaydedilen bilgi türlerini ve bunları nasıl kullandığımızı içerir.",
+        p2: "Ek sorularınız varsa veya Gizlilik Politikamız hakkında daha fazla bilgiye ihtiyacınız varsa, bizimle iletişime geçmekten çekinmeyin.",
+        p3: "Onay",
+        p4: "Web sitemizi kullanarak, Gizlilik Politikamızı kabul etmiş ve şartlarını onaylamış olursunuz.",
+        p5: "Topladığımız bilgiler",
+        p6: "Sizden sağlamanız istenen kişisel bilgiler ve bunları sağlamanızın istenme nedenleri, kişisel bilgilerinizi sağlamanızı istediğimiz noktada size açıkça belirtilecektir.",
+        p7: "Bilgilerinizi nasıl kullanıyoruz",
+        p8: "Topladığımız bilgileri, web sitemizi işletmek ve sürdürmek, deneyiminizi iyileştirmek ve kişiselleştirmek, sitemizi nasıl kullandığınızı anlamak, yeni ürünler/hizmetler geliştirmek ve sizinle doğrudan veya iş ortaklarımız aracılığıyla iletişim kurmak için kullanırız.",
+        contact: "İletişim: novias@minalidya.es"
+    }
+};
+
+const pageContent = content[lang] || content['es'];
+
+---
+
+<Layout title={`${pageContent.title} | Mina Lidya`} lang={lang}>
+  <Header />
+
+  <main class="legal-page">
+    <div class="container-narrow">
+      <header class="legal-header">
+        <h1 class="legal-title">{pageContent.title}</h1>
+      </header>
+      
+      <section class="legal-content">
+        <p>{pageContent.p1}</p>
+        <p>{pageContent.p2}</p>
+        
+        <h2>{pageContent.p3}</h2>
+        <p>{pageContent.p4}</p>
+        
+        <h2>{pageContent.p5}</h2>
+        <p>{pageContent.p6}</p>
+        
+        <h2>{pageContent.p7}</h2>
+        <p>{pageContent.p8}</p>
+        
+        <div class="legal-contact-box">
+            <p>{pageContent.contact}</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 180px 0 100px;
+    background: #fff;
+    color: #333;
+    line-height: 1.8;
+    font-family: 'Inter', sans-serif;
+  }
+  .container-narrow {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+  .legal-header {
+    margin-bottom: 60px;
+    text-align: center;
+  }
+  .legal-title {
+    font-family: 'Italiana', serif;
+    font-size: 48px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+  }
+  .legal-content h2 {
+    font-family: 'Italiana', serif;
+    font-size: 24px;
+    margin: 40px 0 20px;
+    text-transform: uppercase;
+    color: #111;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  .legal-content p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+  .legal-contact-box {
+    margin-top: 60px;
+    padding: 30px;
+    background: #f9f9f9;
+    border-left: 4px solid #D5A08D;
+    font-style: italic;
+  }
+  @media (max-width: 768px) {
+    .legal-title { font-size: 32px; }
+  }
+</style>

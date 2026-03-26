@@ -1,0 +1,223 @@
+---
+import { useTranslations } from '../i18n/utils';
+
+const lang = Astro.params.lang || 'es';
+const t = useTranslations(lang);
+---
+<header class="header">
+    <div class="container">
+        <div class="header__logo">
+            <div class="header__issu">
+                <a href={`/${lang}/lookbook/`}><img src="/magazines/bridal.jpg" alt="Mina Lidya Lookbook"></a>
+                <div class="header__issu-desc">
+                    <p>{t('header.banner_text')}</p>
+                    <button class="btn-download"><a href={`/${lang}/lookbook/`}>{t('header.banner_btn')} ></a></button>
+                </div>
+            </div>
+            <div class="logo">
+                <a href={lang === 'es' ? '/' : `/${lang}/`}>
+                    <span class="alta-costura-tag">{t('header.logo_sub')}</span>
+                    <h1 class="main-logo-text">MİNA LİDYA</h1>
+                </a>
+            </div>
+            <div class="header__right">
+                <div class="dropdown header__socials" style="margin-left: auto;">
+                    <ul>
+                        <li class="dropbtn header__nav-links-main">
+                            <a href="#">
+                                {lang.toUpperCase()}
+                                 <img src="/img/elements/down.svg" alt="">
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="dropdown-content">
+                    <ul>
+                        <li><a href="/">Español (ES)</a></li>
+                        <li><a href="/en/">English (EN)</a></li>
+                        <li><a href="/tr/">Türkçe (TR)</a></li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+          <div class="nav__mobile-wrapper">
+            <div class="nav__mobile" id="nav-mobile">
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header__wrapper">
+           
+            <div class="header__modal" id="open-modalabout">
+                <img src="/img/elements/burger.svg" alt="">
+            </div>
+
+            <nav class="header__nav" id="nav-links">
+                <ul class="header__nav-links">
+                     <li class="header__nav-links-main"><a href={lang === 'es' ? '/' : `/${lang}/`}>{t('nav.home')}</a></li>
+
+                    <div class="dropdown-mb-visible">
+                        <ul>
+                          <li class="dropbtn header__nav-links-main">
+                             <a href={`/${lang}/shop`}>
+                                {t('nav.moda')}
+                                 <img src="/img/elements/down.svg" alt="">
+                            </a>
+                           </li>
+                        </ul>
+                        <div class="dropdown-mb-visible-content">
+                            <ul>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=gelinlik`}>{t('cat.gelinlik')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=nikah`}>{t('cat.nikah')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=soz`}>{t('cat.soz')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=nisan-elbisesi`}>{t('cat.nisan')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=kina-elbisesi`}>{t('cat.kina')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=after-party`}>{t('cat.party')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=abiye`}>{t('cat.abiye')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=kaftan`}>{t('cat.kaftan')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=salvar`}>{t('cat.salvar')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=buyuk-beden`}>{t('cat.plus')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=outlet`}>{t('cat.outlet')}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-mb-visible">
+                        <ul>
+                          <li class="dropbtn header__nav-links-main">
+                             <a href={`/${lang}/shop?cat=tesettur-gelinlik`}>
+                                {t('nav.nupcial')}
+                                 <img src="/img/elements/down.svg" alt="">
+                            </a>
+                           </li>
+                        </ul>
+                        <div class="dropdown-mb-visible-content">
+                            <ul>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=tesettur-gelinlik`}>{t('cat.modest')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=nikah`}>{t('cat.nikah')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=soz`}>{t('cat.soz')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=nisan-elbisesi`}>{t('cat.nisan')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=kina-elbisesi`}>{t('cat.kina')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=after-party`}>{t('cat.party')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=abiye`}>{t('cat.abiye')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=kaftan`}>{t('cat.kaftan')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=salvar`}>{t('cat.salvar')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=buyuk-beden`}>{t('cat.plus')}</a></li>
+                                <li class="header__nav-links-dropdown"><a href={`/${lang}/shop?cat=outlet`}>{t('cat.outlet')}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                   
+                    <li class="header__nav-links-main"><a href={`/${lang}/lookbook/`}>{t('nav.boutique')}</a></li>
+                    <li class="header__nav-links-main"><a href={`/${lang}/atelier/`}>{t('nav.atellier')}</a></li>
+                    <li class="header__nav-links-main"><a href={`/${lang}/online-couture/`}>{t('nav.couture')}</a></li>
+                    <li class="header__nav-links-main"><a href={`/${lang}/alta-costura/`}>{t('nav.alta_costura')}</a></li>
+                    <li class="header__nav-links-main"><a href={`/${lang}/rendezvous/`}>{t('nav.rendezvous')}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <style>
+        /* ELITE DROPDOWN SYSTEM */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: block;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content ul li a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #666;
+            text-transform: uppercase;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .dropdown-content ul li a:hover {
+            color: #D5A08D;
+            padding-left: 25px;
+            background: #fafafa;
+        }
+
+        /* COLLECTION DROPDOWNS */
+        .dropdown-mb-visible {
+            position: relative;
+        }
+
+        .dropdown-mb-visible-content {
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            min-width: 220px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid #f0f0f0;
+            padding: 15px 0;
+        }
+
+        .dropdown-mb-visible:hover .dropdown-mb-visible-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Standardize All Dropdown Links */
+        .dropdown-content ul li a,
+        .dropdown-mb-visible-content ul li a {
+            display: block;
+            padding: 10px 25px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #555 !important;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dropdown-content ul li a:hover,
+        .dropdown-mb-visible-content ul li a:hover {
+            color: #D5A08D !important;
+            padding-left: 30px;
+            background: #fafafa;
+        }
+
+        /* LIGHTBOX BUTTON FIXES (Applied via Global or inside shop.astro) */
+    </style>
+</header>
+<div class="line-deco"></div>

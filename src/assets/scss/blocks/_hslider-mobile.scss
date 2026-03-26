@@ -1,0 +1,20 @@
+.hslider-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .hslider-mobile {
+        display: block;
+
+        img {
+          max-width: 100%;
+        }
+        
+    }
+    
+    
+}
+
+
+
+

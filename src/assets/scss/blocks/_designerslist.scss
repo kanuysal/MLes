@@ -1,0 +1,41 @@
+.designerslist {
+    margin: 150px 0 200px;
+    text-align: center;
+
+    &__lettering {
+        font-weight: 500;
+        font-size: 72px;
+    }
+
+
+    p {
+        margin-bottom: 35px;
+        padding: 0 20px;
+    }
+
+    &__lettering {
+        font-weight: 500;
+        font-size: 24px;  
+    }
+    &__desc {
+        font-size: 18px;
+        letter-spacing: 1px;
+        line-height: 1.5;
+
+        strong {
+            font-weight: 500;
+        }
+        a {
+            font-weight: 200;
+        }
+
+    }
+
+}
+
+@media (max-width: 764px) {
+    .designerslist {
+        margin: 50px 0;
+        padding: 0 10px;
+    }
+}

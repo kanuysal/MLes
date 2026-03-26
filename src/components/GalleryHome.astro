@@ -1,0 +1,95 @@
+---
+const { lang = 'es' } = Astro.props;
+
+const galleryItems = [
+    {
+        href: '/products/kate-gelinlik/',
+        img: 'https://minalidya.com/wp-content/uploads/2026/02/marina-gelinlik-9-scaled.avif',
+        date: 'Jan, 2026',
+        desc: 'Kate Gelinlik<br>Royal Collection',
+        cat: 'Kate'
+    },
+    {
+        href: '/products/pinar-balik-model-gelinlik/',
+        img: 'https://minalidya.com/wp-content/uploads/2025/09/gonca-7-scaled.avif', // Placeholder if Pinar not found, but I will use a valid look
+        date: 'Feb, 2026',
+        desc: 'Pınar Gelinlik<br>Mermaid Selection',
+        cat: 'Pınar'
+    },
+    {
+        href: '/products/stephany/',
+        img: 'https://minalidya.com/wp-content/uploads/2024/12/ahu-4-1-scaled.avif',
+        date: 'March, 2026',
+        desc: 'Stephany<br>High Couture',
+        cat: 'Stephany'
+    }
+];
+
+// Note: I will use the actual Kate/Pinar/Stephany images from the migration project if I could, 
+// but using the closest high-res AVIF from the current project for guaranteed loading.
+---
+
+<section class="gallery-home" style="margin-top: 50px;">
+    <div class="container">
+        <div class="gallery-home__wrapper">
+            {galleryItems.map((item) => (
+                <div class="gallery-home__item margintop-25">
+                    <a href={item.href}>
+                         <img src={item.img} width="388" height="496" alt={item.cat} style="object-fit: cover; height: 500px; width: 100%;">
+                         <p class="gallery-home__date">{item.date}</p>
+                         <p class="gallery-home__desc" set:html={item.desc} />
+                         <div class="gallery-home__line"></div>
+                         <div class="gallery-home__cat">{item.cat}</div>
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+    .gallery-home__wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 30px;
+        padding: 25px 0;
+        border-top: 0.5px solid #4D4D4D;
+    }
+    .gallery-home__item {
+        text-align: center;
+        transition: all 0.5s ease;
+    }
+    .gallery-home__item img:hover {
+        filter: grayscale(100%);
+    }
+    .gallery-home__date {
+        font-size: 15px;
+        color: #6a5921;
+        margin: 15px 0 5px;
+        font-style: italic;
+    }
+    .gallery-home__desc {
+        font-family: 'Cinzel', serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .gallery-home__line {
+        width: 100%;
+        height: 0.5px;
+        background-color: #000;
+        margin: 10px 0;
+    }
+    .gallery-home__cat {
+        font-family: 'Cinzel', serif;
+        letter-spacing: 1px;
+        color: #6a5921;
+        text-transform: uppercase;
+    }
+    @media (max-width: 768px) {
+        .gallery-home__wrapper {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
