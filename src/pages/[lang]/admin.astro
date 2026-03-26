@@ -1,6 +1,18 @@
----
 import Layout from '../../layouts/Layout.astro';
 import products from '../../data/products.json';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'es' } },
+    { params: { lang: 'en' } },
+    { params: { lang: 'tr' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'nl' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'ru' } },
+  ];
+}
 
 const { lang = 'es' } = Astro.params;
 ---
