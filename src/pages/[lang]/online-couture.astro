@@ -42,11 +42,11 @@ const products = [
           <div class="video-overlay"></div>
       </div>
       <div class="container hero-content">
-        <span class="hero-label">WORKSHOP DIGITAL</span>
-        <h1 class="hero-title">ESTAMOS SUPERANDO DISTANCIAS</h1>
+        <span class="hero-label">{t('online.hero_label')}</span>
+        <h1 class="hero-title">{t('online.title')}</h1>
         <p class="hero-subtitle">{t('online.digital_taller_subtitle')}</p>
         <div class="hero-actions">
-            <a href="#steps" class="btn-outline-white">DESCOBRIR EL PROCESO</a>
+            <a href="#steps" class="btn-outline-white">{t('online.discover_btn')}</a>
         </div>
       </div>
     </section>
@@ -62,7 +62,7 @@ const products = [
                 </div>
             </div>
             <div class="narr-right">
-                <span class="tag-line">FUTURO DE LA MODA</span>
+                <span class="tag-line">{t('online.tagline')}</span>
                 <h2 class="section-title">{t('online.digital_taller_title')}</h2>
                 <div class="narr-accent"></div>
                 <p class="narr-text-p">{t('online.digital_taller_desc')}</p>
@@ -75,8 +75,8 @@ const products = [
     <section class="process-steps" id="steps">
         <div class="container">
             <div class="steps-header">
-                <h2 class="serif-title">Tu Sueño a Medida, Paso a Paso</h2>
-                <p class="steps-intro">La intimidad del taller, ahora en tu pantalla.</p>
+                <h2 class="serif-title">{t('online.steps_h2')}</h2>
+                <p class="steps-intro">{t('online.steps_p')}</p>
             </div>
             <div class="steps-grid">
                 <div class="step-card">
@@ -126,9 +126,9 @@ const products = [
     <section class="online-cta">
         <div class="container cta-container">
             <div class="cta-box">
-                <span class="cta-tag">TU SUEÑO, NUESTRO ARTE</span>
+                <span class="cta-tag">{t('online.cta_tag')}</span>
                 <h2 class="cta-main-title">{t('online.cta_title')}</h2>
-                <p class="cta-desc">Mina Lidya redefine el lujo para la novia moderna. Empieza tu viaje hoy mismo.</p>
+                <p class="cta-desc">{t('online.cta_description')}</p>
                 <a href={`/${lang}/shop`} class="btn-elite-shimmer">{t('online.cta_btn')}</a>
             </div>
         </div>

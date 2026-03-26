@@ -42,7 +42,7 @@ const products = [
       </video>
       <div class="hero-overlay"></div>
       <div class="container hero-content">
-        <span class="hero-label-top">EXCLUSIVIDAD Y ELEGANCIA</span>
+        <span class="hero-label-top">{t('alta.hero_label')}</span>
         <h1 class="hero-main-title">{t('nav.alta_costura').toUpperCase()}</h1>
         <p class="hero-intro-text">{t('alta.intro')}</p>
         <div class="scroll-indicator">
@@ -56,12 +56,12 @@ const products = [
         <div class="container narr-grid">
             <div class="narr-text">
                 <div class="text-reveal-wrapper">
-                    <span class="narr-tag">Nuestro Legado</span>
-                    <h2 class="narr-title">Evolución de un Sueño</h2>
+                    <span class="narr-tag">{t('alta.legacy_tag')}</span>
+                    <h2 class="narr-title">{t('alta.legacy_title')}</h2>
                     <div class="line-accent"></div>
                     <p class="narr-p">{t('alta.p2')}</p>
                     <div class="narr-quote">
-                        "Cada vestido es una obra de arte, diseñada para perdurar en el tiempo."
+                        {t('alta.quote')}
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@ const products = [
     <section class="hiyab-special">
         <div class="container">
             <div class="hiyab-header">
-                <h2 class="section-title-serif">Diseños Únicos con Hiyab</h2>
+                <h2 class="section-title-serif">{t('alta.modest_title')}</h2>
                 <div class="subtitle-line"></div>
             </div>
             <div class="hiyab-grid">
@@ -86,18 +86,19 @@ const products = [
                     <div class="feature-list">
                         <div class="feature-item">
                             <span class="dot"></span>
-                            <span>Telas de alta gama importadas</span>
+                            <span>{t('alta.feature1')}</span>
                         </div>
                         <div class="feature-item">
                             <span class="dot"></span>
-                            <span>Bordados a mano personalizados</span>
+                            <span>{t('alta.feature2')}</span>
                         </div>
                         <div class="feature-item">
                             <span class="dot"></span>
-                            <span>Ajuste perfecto garantizado</span>
+                            <span>{t('alta.feature3')}</span>
                         </div>
                     </div>
                 </div>
+div>
                 <div class="hiyab-gallery">
                     <div class="gallery-item-wrapper main-item">
                         <img src={products[1].img} alt="Hiyab Design 1" />

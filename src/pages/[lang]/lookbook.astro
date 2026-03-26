@@ -21,11 +21,11 @@ const { lang } = Astro.params;
 const t = useTranslations(lang);
 
 const magazines = [
-  { title: "Bridal Collection", pdf: "/magazines/bridal.pdf", cover: "/magazines/bridal.jpg" },
-  { title: "Engagement / Night", pdf: "/magazines/night.pdf", cover: "/magazines/night.jpg" },
-  { title: "Modest Fashion", pdf: "/magazines/modest.pdf", cover: "/magazines/modest.jpg" },
-  { title: "After Party", pdf: "/magazines/after-party.pdf", cover: "/magazines/after-party.jpg" },
-  { title: "Bridal Makeup", pdf: "/magazines/makeup.pdf", cover: "/magazines/makeup.png" }
+  { title: t('lookbook.cat.bridal'), pdf: "/magazines/bridal.pdf", cover: "/magazines/bridal.jpg" },
+  { title: t('lookbook.cat.night'), pdf: "/magazines/night.pdf", cover: "/magazines/night.jpg" },
+  { title: t('lookbook.cat.modest'), pdf: "/magazines/modest.pdf", cover: "/magazines/modest.jpg" },
+  { title: t('lookbook.cat.afterparty'), pdf: "/magazines/after-party.pdf", cover: "/magazines/after-party.jpg" },
+  { title: t('lookbook.cat.makeup'), pdf: "/magazines/makeup.pdf", cover: "/magazines/makeup.png" }
 ];
 ---
 
@@ -43,7 +43,7 @@ const magazines = [
       <div class="container hero-container">
         <span class="hero-label">EDITORIAL</span>
         <h1 class="hero-title">{t('nav.boutique')}</h1>
-        <p class="hero-subtitle">Discover our latest collections in 3D experience</p>
+        <p class="hero-subtitle">{t('lookbook.hero_subtitle')}</p>
         <div class="hero-line"></div>
       </div>
     </section>
@@ -57,12 +57,12 @@ const magazines = [
                         <div class="magazine-frame" onclick={`window.eliteReader.open('${mag.pdf}')`}>
                             <img src={mag.cover} alt={mag.title} />
                             <div class="magazine-overlay">
-                                <span>OPEN LOOKBOOK</span>
+                                <span>{t('lookbook.open')}</span>
                             </div>
                         </div>
                         <div class="magazine-meta">
                             <h3>{mag.title.toUpperCase()}</h3>
-                            <button class="btn-read" onclick={`window.eliteReader.open('${mag.pdf}')`}>EXPLORE</button>
+                            <button class="btn-read" onclick={`window.eliteReader.open('${mag.pdf}')`}>{t('lookbook.explore')}</button>
                         </div>
                     </div>
                 ))}
@@ -75,7 +75,7 @@ const magazines = [
         <div class="container">
             <div class="quote-box">
                 <span class="script-tag">Stylish</span>
-                <p class="quote-text">"La elegancia no es destacar, sino ser recordado."</p>
+                <p class="quote-text">{t('lookbook.quote')}</p>
                 <div class="quote-author">Mina Lidya Atelier</div>
             </div>
         </div>
