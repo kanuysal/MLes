@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-import sitemap from '@astrojs/sitemap';
+// sitemap import removed to fix build error
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,5 +16,5 @@ export default defineConfig({
     }
   },
 
-  integrations: [sitemap()]
+  integrations: []
 });
