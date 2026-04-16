@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "postbuild": "ls dist/sitemap-index.xml",
     "preview": "astro preview",
     "astro": "astro"
   },
