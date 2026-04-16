@@ -203,8 +203,9 @@ const waPhone = '34632623300';
         {products
           .filter(p => {
             if (p.id === product.id || p.status === 'draft') return false;
-            const pCats = (p.categories || []).map((c: any) => typeof c === 'string' ? c : (c?.slug || c?.name || '')).join(',').toLowerCase();
-            return pCats.includes(firstCategory.toLowerCase());
+            const pCats = (p.categories || []).map((c: any) => typeof c === 'string' ? c : (c?.slug || c?.name || c?.toString() || '')).join(',').toLowerCase();
+            const safeFirstCat = String(firstCategory || "").toLowerCase();
+            return pCats.includes(safeFirstCat);
           })
           .slice(0, 8)
           .map(p => {

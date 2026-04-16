@@ -31,9 +31,11 @@ const items = targetCategories.map(catItem => {
     }
 
     if (!product) {
-       let matches = products.filter(p => {
-            const matchesCat = p.category?.toLowerCase().includes(catItem.id) || p.categories?.some(c => c.toLowerCase().includes(catItem.id));
-            const isNupcial = p.mappedAttributes?.["Tesettür Uyumu"]?.toLowerCase() === "evet";
+        let matches = products.filter(p => {
+            const pCat = String(p.category || "").toLowerCase();
+            const pCatsArr = (p.categories || []).map((c: any) => typeof c === 'string' ? c : (c?.slug || c?.name || c?.toString() || '')).map(c => String(c || "").toLowerCase());
+            const matchesCat = pCat.includes(catItem.id) || pCatsArr.some(c => c.includes(catItem.id));
+            const isNupcial = String(p.mappedAttributes?.["Tesettür Uyumu"] || "").toLowerCase() === "evet";
             const correctModesty = catItem.nupcial ? isNupcial : !isNupcial;
             return matchesCat && correctModesty && !pickedProductIds.has(p.id);
         });
@@ -43,7 +45,7 @@ const items = targetCategories.map(catItem => {
     }
 
     if (!product) {
-        product = products.find(p => p.category?.toLowerCase().includes(catItem.id));
+        product = products.find(p => String(p.category || "").toLowerCase().includes(catItem.id));
     }
 
     product = product || products[0];
