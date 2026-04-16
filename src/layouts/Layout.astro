@@ -18,6 +18,16 @@ import CookieConsent from '../components/CookieConsent.astro';
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-P8D4BF5G');</script>
     <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GWRF0RJ74G"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GWRF0RJ74G');
+    </script>
     
     <!-- SEO & OpenGraph -->
     <title>{title || 'Mina Lidya - Luxury Bridal'}</title>

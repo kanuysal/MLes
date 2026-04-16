@@ -1,9 +1,12 @@
 import { defineConfig } from 'astro/config';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://minalidya.es',
   output: 'static',
+
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en', 'fr', 'tr', 'it', 'de', 'nl', 'ru'],
@@ -11,5 +14,7 @@ export default defineConfig({
         prefixDefaultLocale: false,
         fallbackType: 'redirect'
     }
-  }
+  },
+
+  integrations: [sitemap()]
 });
